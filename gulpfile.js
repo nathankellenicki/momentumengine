@@ -8,7 +8,7 @@ var gulp = require("gulp"),
 
 var build = function (options, callback) {
 
-    var plugins = [];
+    let plugins = [];
 
     if (options.minify) {
         plugins = [
@@ -32,7 +32,7 @@ var build = function (options, callback) {
         plugins: plugins,
         output: {
             path: path.join(__dirname, "dist"),
-            filename: "index.js"
+            filename: "es5.js"
         },
         module: {
             loaders: [{
@@ -40,14 +40,18 @@ var build = function (options, callback) {
                 test: /\.js$/,
                 include: [
                     path.join(__dirname, "src")
-                ]
+                ],
+                query: {
+                    plugins: ["transform-runtime"],
+                    presets: ["es2015", "stage-0"]
+                }
             }]
         }
     }, (error, stats) => {
 
         if (error) {
 
-            var pluginError = new gutil.PluginError("webpack", error);
+            let pluginError = new gutil.PluginError("webpack", error);
 
             if (callback) {
                 callback(pluginError);
