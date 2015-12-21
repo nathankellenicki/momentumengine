@@ -1,5 +1,4 @@
 import Rect from "../classes/rect.js";
-import Vector2D from "../classes/vector2d.js";
 
 class CollisionMethods {
 
