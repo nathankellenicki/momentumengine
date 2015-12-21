@@ -49,11 +49,11 @@ window.onload = function () {
 
         this.pos.add(this.state.speed.clone().multiply(pong.lastFrameDelta));
 
-        if ((this.pos.x + baseSize > width) || (this.pos.x < 0)) {
+        if ((this.pos.x + baseSize > width && this.state.speed.x > 0) || (this.pos.x < 0 && this.state.speed.x < 0)) {
             this.state.speed.x = -this.state.speed.x;
         }
 
-        if ((this.pos.y + baseSize > height) || (this.pos.y < 0)) {
+        if ((this.pos.y + baseSize > height && this.state.speed.y > 0) || (this.pos.y < 0 && this.state.speed.y < 0)) {
             this.state.speed.y = -this.state.speed.y;
         }
 
