@@ -1,7 +1,7 @@
 "use strict";
 
 import Entity from "./entity.js";
-import KeyboardInput, {keyConsts} from "./keyboardinput.js";
+import KeyboardInput from "./keyboardinput.js";
 
 class Game extends Entity {
 
@@ -89,15 +89,12 @@ class Game extends Entity {
         this.lastFrameDelta = 0;
         this.frameCounter = 0;
 
-        this.consts = {
-            keys: keyConsts
-        };
-
         this.inputs = {};
         if (config.inputs.keyboard) {
             this.inputs.keyboard = new KeyboardInput(this);
         }
 
+        this._game = this;
         this._lastFrameTimestamp = 0;
         this._wantPause = true;
 
@@ -117,7 +114,7 @@ class Game extends Entity {
 
         self._wantPause = false;
 
-        var requestFrame = (function () {
+        var requestFrame = (() => {
 
             return (window.requestAnimationFrame ||
                 window.webkitRequestAnimationFrame ||
@@ -139,9 +136,7 @@ class Game extends Entity {
             self.lastFrameDelta = currentTimestamp - self._lastFrameTimestamp;
             self._lastFrameTimestamp = currentTimestamp;
 
-            if (self.lastFrameDelta > (1000 / self.desiredFps)) {
-                self.lastFrameDelta = (1000 / self.desiredFps);
-            }
+            self.lastFrameDelta = Math.min(self.lastFrameDelta, 1000 / self.desiredFps);
 
             if (self._wantPause) {
                 return;

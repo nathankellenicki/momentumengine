@@ -1,7 +1,7 @@
 "use strict";
 
 
-const keyConsts = {
+const KeyConsts = {
     SPACE: 32,
     BACKSPACE: 8,
     TAB: 9,
@@ -137,4 +137,4 @@ class KeyboardInput {
 
 
 export default KeyboardInput;
-export {keyConsts};
+export {KeyConsts};

@@ -25,14 +25,16 @@ var build = function (options, callback) {
     }
 
     webpack({
-        entry: path.join(__dirname, "src", "index.js"),
+        entry: {
+            "es5": path.join(__dirname, "src", "es5.js")
+        },
         bail: !options.watch,
         watch: options.watch,
         devtool: "source-map",
         plugins: plugins,
         output: {
             path: path.join(__dirname, "dist"),
-            filename: "es5.js"
+            filename: "[name].js"
         },
         module: {
             loaders: [{

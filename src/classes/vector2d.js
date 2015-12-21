@@ -72,7 +72,7 @@ class Vector2D {
 
 
     dot (val) {
-        return this.x * val.x + this.y * val.y;
+        return (this.x * val.x + this.y * val.y);
     }
 
 
@@ -96,8 +96,18 @@ class Vector2D {
     }
 
 
+    degrees () {
+        return (Math.atan(this.x, this.y) * 180);
+    }
+
+
     toArray () {
         return [this.x, this.y];
+    }
+
+
+    toString () {
+        return `[${this.x}},${this.y}}]`;
     }
 
 
