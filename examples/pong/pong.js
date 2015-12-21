@@ -42,7 +42,7 @@ window.onload = function () {
     mainScene.addChildEntity(rightPaddle);
 
 
-    // Update and render the ball
+    // Update the ball position
     ball.state.speed = new MomentumEngine.Classes.Vector2D(0.1, 0.05); // Current ball speed
 
     ball.update = function () {
@@ -60,7 +60,7 @@ window.onload = function () {
     };
 
 
-    // Update and render the left paddle
+    // Update the left paddle according to keyboard input
     leftPaddle.update = function () {
 
         if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_Q) || pong.inputs.keyboard.isPressed(KeyConsts.UP)) {
@@ -79,7 +79,7 @@ window.onload = function () {
             leftPaddle.pos.y = baseSize;
         }
 
-        if (leftPaddle.isColliding(ball) && ball.state.speed.x < 0) {
+        if (leftPaddle.isCollidingWith(ball) && ball.state.speed.x < 0) {
             ball.state.speed.x = -ball.state.speed.x;
             console.log(ball.state.speed.length());
         }
@@ -87,7 +87,7 @@ window.onload = function () {
     };
 
 
-    // Render the right paddle
+    // Update the right paddle according to keyboard input
     rightPaddle.update = function () {
 
         if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_O)) {
@@ -106,7 +106,7 @@ window.onload = function () {
             rightPaddle.pos.y = baseSize;
         }
 
-        if (rightPaddle.isColliding(ball) && ball.state.speed.x > 0) {
+        if (rightPaddle.isCollidingWith(ball) && ball.state.speed.x > 0) {
             ball.state.speed.x = -ball.state.speed.x;
         }
 

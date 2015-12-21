@@ -63,6 +63,7 @@ class Entity {
 
                 this._calculatedPos.x = this.pos.x + parentPos.x;
                 this._calculatedPos.y = this.pos.y + parentPos.y;
+
             } else {
                 this._calculatedPos.x = this.pos.x;
                 this._calculatedPos.y = this.pos.y;
@@ -89,6 +90,8 @@ class Entity {
 
 
     _updateEntity () {
+
+        this._recalculatePos();
 
         if ((this.update && this.update()) || (typeof this.update === "undefined")) {
 

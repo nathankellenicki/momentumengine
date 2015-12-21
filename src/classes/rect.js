@@ -19,7 +19,7 @@ class Rect extends Entity {
     }
 
 
-    isColliding (entity) {
+    isCollidingWith (entity) {
 
         if (entity instanceof Rect) {
             return CollisionMethods.AABB(this, entity);
@@ -29,8 +29,6 @@ class Rect extends Entity {
 
 
     render () {
-
-        this._recalculatePos();
 
         if (this._game) {
 
