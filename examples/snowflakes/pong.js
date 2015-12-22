@@ -28,7 +28,7 @@ window.onload = function () {
         black = new MomentumEngine.Classes.Color(0, 0, 0);
 
 
-    // All of these are instances of MomentumEngine.Classes.Entity
+    // All of these are instances of MomentumEngine.Entity;
     var mainScene = new MomentumEngine.Classes.Rect(0, 0, width, height, black),
         ball = new MomentumEngine.Classes.Rect((width / 2) - (baseSize / 2), (height / 2) - (baseSize / 2), baseSize, baseSize, white),
         leftPaddle = new MomentumEngine.Classes.Rect(baseSize, baseSize, baseSize, baseSize * 7, white),

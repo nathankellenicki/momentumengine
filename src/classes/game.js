@@ -17,19 +17,19 @@ class Game extends Entity {
         if (config.canvas) {
             this.canvas = config.canvas;
         } else {
-            throw new Error("MomentumEngine.Game must be constructed with a canvas");
+            throw new Error("MomentumEngine.Classes.Game must be constructed with a canvas");
         }
 
         if (config.width) {
             this.width = config.width;
         } else {
-            throw new Error("MomentumEngine.Game must be constructed with canvas width");
+            throw new Error("MomentumEngine.Classes.Game must be constructed with canvas width");
         }
 
         if (config.height) {
             this.height = config.height;
         } else {
-            throw new Error("MomentumEngine.Game must be constructed with canvas height");
+            throw new Error("MomentumEngine.Classes.Game must be constructed with canvas height");
         }
 
 
@@ -126,6 +126,7 @@ class Game extends Entity {
         })();
 
         self._lastFrameTimestamp = +(new Date());
+        self.startTime = self._lastFrameTimestamp;
 
         var loop = function () {
 
