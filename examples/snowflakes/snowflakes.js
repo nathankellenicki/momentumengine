@@ -48,9 +48,10 @@ window.onload = function () {
 
             mainScene.addChildEntity(newSnowflake);
 
-            mainScene.children.forEach((oldSnowflake) => {
+            mainScene.children.forEach(function (oldSnowflake) {
 
                 if (oldSnowflake.pos.y > height) {
+                    // Clean up snowflakes that are no longer visible
                     mainScene.detachChildEntity(oldSnowflake);
                 }
 
