@@ -110,6 +110,8 @@ window.onload = function () {
         }
 
     };
+
+
     pong.start();
 
 

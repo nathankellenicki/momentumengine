@@ -101,6 +101,17 @@ class Game extends Entity {
     }
 
 
+    step (delta) {
+
+        this.lastFrameDelta = delta;
+        this.frameCounter++;
+
+        this._updateEntity();
+        this._renderEntity();
+
+    }
+
+
     start () {
 
         var self = this; // NK: Hate doing this...better way plz?
@@ -130,24 +141,17 @@ class Game extends Entity {
 
         var loop = function () {
 
-            self.frameCounter++;
-
-            let currentTimestamp = +(new Date());
-
-            self.lastFrameDelta = currentTimestamp - self._lastFrameTimestamp;
-            self._lastFrameTimestamp = currentTimestamp;
-
-            self.lastFrameDelta = Math.min(self.lastFrameDelta, 1000 / self.desiredFps);
-
             if (self._wantPause) {
                 return;
             }
 
-            self._updateEntity.bind(self);
-            self._updateEntity();
+            let currentTimestamp = +(new Date()),
+                delta = currentTimestamp - self._lastFrameTimestamp;
 
-            self._renderEntity.bind(self);
-            self._renderEntity();
+            delta = Math.min(delta, 1000 / self.desiredFps);
+            self._lastFrameTimestamp = currentTimestamp;
+
+            self.step(delta);
 
             requestFrame(loop);
 
