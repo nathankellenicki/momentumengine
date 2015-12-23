@@ -108,7 +108,7 @@ class Game extends Entity {
         if (self._wantPause) {
             self._wantPause = false;
         } else {
-            console.log("MomentumEngine.Game.start called, game instance is already started");
+            console.log("MomentumEngine.Classes.Game.start called, game instance is already started");
             return false; // Game is already running
         }
 
@@ -165,7 +165,7 @@ class Game extends Entity {
             this._wantPause = true;
             return true;
         } else {
-            console.log("MomentumEngine.Game.pause called, game instance is already paused");
+            console.log("MomentumEngine.Classes.Game.pause called, game instance is already paused");
             return false;
         }
     }

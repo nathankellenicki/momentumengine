@@ -44,7 +44,7 @@ class Sprite extends Entity {
 
     render () {
 
-        if (this.isReady()) {
+        if (this.isReady() && this._game) {
 
             var imageObj = this._image.getImageObj();
 
