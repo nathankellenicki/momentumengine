@@ -86,7 +86,6 @@ class Game extends Entity {
 
 
         // Initialize defaults
-        this.lastFrameDelta = 0;
         this.frameCounter = 0;
 
         this.inputs = {};
@@ -103,10 +102,9 @@ class Game extends Entity {
 
     step (delta) {
 
-        this.lastFrameDelta = delta;
         this.frameCounter++;
 
-        this._updateEntity();
+        this._updateEntity(delta);
         this._renderEntity();
 
     }

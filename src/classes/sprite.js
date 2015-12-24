@@ -37,7 +37,7 @@ class Sprite extends Entity {
     }
 
 
-    isReady () { // Overrides super isReady
+    isReady () {
         return (this._image.isLoaded() && !this._image.isError());
     }
 
