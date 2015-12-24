@@ -34,7 +34,7 @@ window.onload = function () {
     // Create scene graph
     snowflakes.addChildEntity(mainScene);
 
-    mainScene.update = function () {
+    mainScene.update = function (delta) {
 
         if ((snowflakes.frameCounter % 120) == 0) { // Every two seconds or so, add a new snowflake
 
@@ -43,7 +43,7 @@ window.onload = function () {
             var newSnowflake = new MomentumEngine.Classes.Sprite(startPos, -100, 100, 100, snowflakeImg);
 
             newSnowflake.update = function () {
-                this.pos.y = this.pos.y + (snowflakes.lastFrameDelta * 0.06);
+                this.pos.y = this.pos.y + (delta * 0.06);
             };
 
             mainScene.addChildEntity(newSnowflake);

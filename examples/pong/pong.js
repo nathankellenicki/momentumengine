@@ -45,9 +45,9 @@ window.onload = function () {
     // Update the ball position
     ball.state.speed = new MomentumEngine.Classes.Vector2D(0.1, 0.05); // Current ball speed
 
-    ball.update = function () {
+    ball.update = function (delta) {
 
-        this.pos.add(this.state.speed.clone().multiply(pong.lastFrameDelta));
+        this.pos.add(this.state.speed.clone().multiply(delta));
 
         if ((this.pos.x + baseSize > width && this.state.speed.x > 0) || (this.pos.x < 0 && this.state.speed.x < 0)) {
             this.state.speed.x = -this.state.speed.x;
@@ -61,14 +61,14 @@ window.onload = function () {
 
 
     // Update the left paddle according to keyboard input
-    leftPaddle.update = function () {
+    leftPaddle.update = function (delta) {
 
         if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_Q) || pong.inputs.keyboard.isPressed(KeyConsts.UP)) {
-            leftPaddle.pos.y -= (0.5 * pong.lastFrameDelta);
+            leftPaddle.pos.y -= (0.5 * delta);
         }
 
         if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_A) || pong.inputs.keyboard.isPressed(KeyConsts.DOWN)) {
-            leftPaddle.pos.y += (0.5 * pong.lastFrameDelta);
+            leftPaddle.pos.y += (0.5 * delta);
         }
 
         if (leftPaddle.pos.y > height - (baseSize * 8)) {
@@ -87,14 +87,14 @@ window.onload = function () {
 
 
     // Update the right paddle according to keyboard input
-    rightPaddle.update = function () {
+    rightPaddle.update = function (delta) {
 
         if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_O)) {
-            rightPaddle.pos.y -= (0.5 * pong.lastFrameDelta);
+            rightPaddle.pos.y -= (0.5 * delta);
         }
 
         if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_L)) {
-            rightPaddle.pos.y += (0.5 * pong.lastFrameDelta);
+            rightPaddle.pos.y += (0.5 * delta);
         }
 
         if (rightPaddle.pos.y > height - (baseSize * 8)) {

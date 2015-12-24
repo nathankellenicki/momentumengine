@@ -9,7 +9,6 @@ class Entity {
 
         this.pos = new Vector2D(x || 0, y || 0);
 
-        this._ready = true;
         this.state = {};
         this.children = [];
 
@@ -61,11 +60,6 @@ class Entity {
     }
 
 
-    isReady () {
-        return this._ready;
-    }
-
-
     _preprocess () {
 
         // NK: The purpose of this function is to calculate the true position of the entity relative to all its parents. It does this recursively, calling the _preprocess method all the way back up the tree and continuously adding the results together.
@@ -108,14 +102,14 @@ class Entity {
     }
 
 
-    _updateEntity () {
+    _updateEntity (delta) {
 
-        var updated = this.update && this.update();
+        var updated = this.update && this.update(delta);
 
-        if (this.isReady() && (updated || (typeof updated == "undefined") || (typeof this.update === "undefined"))) {
+        if (updated || (typeof updated == "undefined") || (typeof this.update === "undefined")) {
 
             this.children.forEach((child) => {
-                child._updateEntity();
+                child._updateEntity(delta);
             });
 
         }
@@ -129,7 +123,7 @@ class Entity {
 
         var rendered = this.render && this.render();
 
-        if (this.isReady() && (rendered || (typeof rendered == "undefined") || (typeof this.render === "undefined"))) {
+        if (rendered || (typeof rendered == "undefined") || (typeof this.render === "undefined")) {
 
             this.children.forEach((child) => {
                 child._renderEntity();
