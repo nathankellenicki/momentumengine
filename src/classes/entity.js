@@ -8,6 +8,8 @@ class Entity {
     constructor (x, y) {
 
         this.pos = new Vector2D(x || 0, y || 0);
+        this.velocity = new Vector2D(0, 0);
+        this.acceleration = new Vector2D(0, 0);
 
         this.state = {};
         this.children = [];
@@ -16,6 +18,30 @@ class Entity {
         this._lastCalculated = 0;
         this._game = null;
         this._parent = null;
+
+    }
+
+
+    setVelocity (x, y) {
+
+        if (x instanceof Vector2D) {
+            this.velocity = x;
+        } else {
+            this.velocity.x = x;
+            this.velocity.y = y;
+        }
+
+    }
+
+
+    setAcceleration (x, y) {
+
+        if (x instanceof Vector2D) {
+            this.acceleration = x;
+        } else {
+            this.acceleration.x = x;
+            this.acceleration.y = y;
+        }
 
     }
 
@@ -46,7 +72,7 @@ class Entity {
 
     detachChildEntity (child) {
 
-        for (var i = 0; i < this.children.length; i++) {
+        for (let i = 0; i < this.children.length; i++) {
             if (this.children[i] == child) {
 
                 this.children.splice(i, 1);
@@ -104,7 +130,19 @@ class Entity {
 
     _updateEntity (delta) {
 
-        var updated = this.update && this.update(delta);
+        // Calculate new position based on velocity and acceleration if there's one set
+        if (this.velocity) {
+
+            if (this.acceleration) {
+                this.velocity.add(this.acceleration);
+            }
+
+            this.pos.add(this.velocity);
+
+        }
+
+        // If there's an update method, call it
+        let updated = this.update && this.update(delta);
 
         if (updated || (typeof updated == "undefined") || (typeof this.update === "undefined")) {
 
@@ -121,7 +159,7 @@ class Entity {
 
         this._preprocess();
 
-        var rendered = this.render && this.render();
+        let rendered = this.render && this.render();
 
         if (rendered || (typeof rendered == "undefined") || (typeof this.render === "undefined")) {
 

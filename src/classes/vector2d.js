@@ -101,6 +101,11 @@ class Vector2D {
     }
 
 
+    angle () {
+        return Math.atan2(this.x, this.y);
+    }
+
+
     toArray () {
         return [this.x, this.y];
     }
@@ -113,6 +118,11 @@ class Vector2D {
 
     clone () {
         return new Vector2D(this.x, this.y);
+    }
+
+
+    static fromAngle (angle, length) {
+        return new Vector2D(length * Math.cos(angle), length * Math.sin(angle));
     }
 
 
