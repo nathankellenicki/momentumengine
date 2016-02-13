@@ -1448,6 +1448,8 @@
 	        this._lastCalculated = 0;
 	        this._game = null;
 	        this._parent = null;
+	
+	        this._creationTime = +new Date();
 	    }
 	
 	    (0, _createClass3.default)(Entity, [{
@@ -1549,6 +1551,12 @@
 	    }, {
 	        key: "_updateEntity",
 	        value: function _updateEntity(delta) {
+	
+	            if (this.timeToLive) {
+	                if (+new Date() - this._creationTime > this.timeToLive) {
+	                    this._parent.detachChildEntity(this);
+	                }
+	            }
 	
 	            // Calculate new position based on velocity and acceleration if there's one set
 	            if (this.velocity) {
@@ -1938,47 +1946,87 @@
 	var Emitter = function (_Entity) {
 	    (0, _inherits3.default)(Emitter, _Entity);
 	
-	    function Emitter(x, y, velocity, particle) {
+	    function Emitter(x, y, rate, velocity, particle) {
 	        (0, _classCallCheck3.default)(this, Emitter);
 	
 	        var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Emitter).call(this, x, y));
 	
 	        _this.particleVelocity = velocity;
 	        _this.particleClass = particle;
+	
+	        _this.emitRate = rate;
 	        _this.emitting = false;
+	        _this._lastEmitTime = _this._creationTime;
+	        _this._wasEmitting = false;
 	
 	        _this.particles = [];
 	
 	        _this.spread = function () {
-	            return Math.PI / 32;
+	            return Math.PI / 1;
 	        };
 	
 	        return _this;
 	    }
 	
 	    (0, _createClass3.default)(Emitter, [{
+	        key: "setParticleParent",
+	        value: function setParticleParent(entity) {
+	            this._particleParent = entity;
+	        }
+	    }, {
 	        key: "_emit",
 	        value: function _emit() {
 	
+	            var ParticleClass = this.particleClass,
+	                parent = this._particleParent || this._parent;
+	
+	            var angle = this.particleVelocity.angle() + this.spread() - Math.random() * this.spread() * 2,
+	                magnitude = this.particleVelocity.length(),
+	                velocity = _vector2d2.default.fromAngle(angle, magnitude);
+	
+	            var particle = new ParticleClass(this._calculatedPos.x, this._calculatedPos.y);
+	            particle.velocity = velocity;
+	
+	            this.particles.push(particle);
+	            parent.addChildEntity(particle);
+	        }
+	    }, {
+	        key: "_triggerEmissions",
+	        value: function _triggerEmissions() {
+	
+	            // We prematurely call preprocess so that child particles can spawn from the emitters permission but be children of a different parent
+	            // NK: This might cause a bug where child renders have an incorrect position because preprocess should normally be called after the update function but before the render, here it is before update. We'll see.
+	            this._preprocess();
+	
 	            if (this.emitting) {
 	
-	                var ParticleClass = this.particleClass;
+	                var currentTime = +new Date();
 	
-	                var angle = this.particleVelocity.angle() + this.spread() - Math.random() * this.spread() * 2,
-	                    magnitude = this.particleVelocity.length(),
-	                    velocity = _vector2d2.default.fromAngle(angle, magnitude);
+	                if (!this._wasEmitting) {
+	                    this._wasEmitting = true;
+	                    this._lastEmitTime = currentTime;
+	                }
 	
-	                var particle = new ParticleClass(this.pos.x, this.pos.y);
-	                particle.velocity = velocity;
+	                // In honour the code of Alex Evans
+	                var emitDelta = currentTime - this._lastEmitTime;
+	                if (emitDelta > this.emitRate) {
 	
-	                this.particles.push(particle);
-	                this._parent.addChildEntity(particle);
+	                    var emissions = ~ ~(emitDelta / this.emitRate);
+	
+	                    this._lastEmitTime = currentTime + (emitDelta - this.emitRate * emissions);
+	
+	                    for (var i = 0; i < emissions; i++) {
+	                        this._emit();
+	                    }
+	                }
+	            } else {
+	                this._wasEmitting = false;
 	            }
 	        }
 	    }, {
 	        key: "update",
 	        value: function update() {
-	            this._emit();
+	            this._triggerEmissions();
 	        }
 	    }]);
 	    return Emitter;
