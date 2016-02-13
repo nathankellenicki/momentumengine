@@ -46,62 +46,69 @@
 
 	"use strict";
 	
-	var _game = __webpack_require__(1);
+	var _getPrototypeOf = __webpack_require__(2);
 	
-	var _game2 = _interopRequireDefault(_game);
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _emitter = __webpack_require__(66);
+	var _classCallCheck2 = __webpack_require__(14);
 	
-	var _emitter2 = _interopRequireDefault(_emitter);
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _entity = __webpack_require__(63);
+	var _possibleConstructorReturn2 = __webpack_require__(19);
 	
-	var _entity2 = _interopRequireDefault(_entity);
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _vector2d = __webpack_require__(64);
+	var _inherits2 = __webpack_require__(56);
 	
-	var _vector2d2 = _interopRequireDefault(_vector2d);
+	var _inherits3 = _interopRequireDefault(_inherits2);
 	
-	var _sprite = __webpack_require__(67);
+	var _es = __webpack_require__(72);
 	
-	var _sprite2 = _interopRequireDefault(_sprite);
-	
-	var _rect = __webpack_require__(70);
-	
-	var _rect2 = _interopRequireDefault(_rect);
-	
-	var _color = __webpack_require__(71);
-	
-	var _color2 = _interopRequireDefault(_color);
-	
-	var _imageloader = __webpack_require__(68);
-	
-	var _imageloader2 = _interopRequireDefault(_imageloader);
-	
-	var _keyboardinput = __webpack_require__(65);
+	var _es2 = _interopRequireDefault(_es);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Classes = {
-	    Game: _game2.default,
-	    Emitter: _emitter2.default,
-	    Entity: _entity2.default,
-	    Sprite: _sprite2.default,
-	    Rect: _rect2.default,
-	    Vector2D: _vector2d2.default,
-	    Color: _color2.default,
-	    ImageLoader: _imageloader2.default
-	};
+	var white = new _es2.default.Classes.Color(255, 255, 255);
 	
-	var Consts = {
-	    Input: {
-	        Keys: _keyboardinput.KeyConsts
+	var BlueParticle = function (_MomentumEngine$Class) {
+	    (0, _inherits3.default)(BlueParticle, _MomentumEngine$Class);
+	
+	    function BlueParticle(x, y) {
+	        (0, _classCallCheck3.default)(this, BlueParticle);
+	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(BlueParticle).call(this, x, y, 1, 1, white));
 	    }
-	};
 	
-	window.MomentumEngine = {
-	    Classes: Classes,
-	    Consts: Consts
+	    return BlueParticle;
+	}(_es2.default.Classes.Rect);
+	
+	window.onload = function () {
+	
+	    var width = 640,
+	        height = 360,
+	        baseSize = width / 64;
+	
+	    var particles = new _es2.default.Classes.Game({
+	        canvas: document.getElementById("canvas"),
+	        width: width,
+	        height: height,
+	        fixRatio: true,
+	        desiredFps: 60
+	    });
+	
+	    var black = new _es2.default.Classes.Color(0, 0, 0),
+	        red = new _es2.default.Classes.Color(255, 0, 0);
+	
+	    var mainScene = new _es2.default.Classes.Rect(0, 0, width, height, black);
+	    particles.addChildEntity(mainScene);
+	
+	    var rect = new _es2.default.Classes.Rect(width / 2 - baseSize, height / 2 - baseSize, baseSize * 2, baseSize * 2, red),
+	        emitter = new _es2.default.Classes.Emitter(0, 0, new _es2.default.Classes.Vector2D(1, 1), BlueParticle);
+	
+	    mainScene.addChildEntity(rect);
+	    rect.addChildEntity(emitter);
+	
+	    emitter.emitting = true;
+	    particles.start();
 	};
 
 /***/ },
@@ -2343,6 +2350,74 @@
 	
 	exports.default = Color;
 
+/***/ },
+/* 72 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _game = __webpack_require__(1);
+	
+	var _game2 = _interopRequireDefault(_game);
+	
+	var _emitter = __webpack_require__(66);
+	
+	var _emitter2 = _interopRequireDefault(_emitter);
+	
+	var _entity = __webpack_require__(63);
+	
+	var _entity2 = _interopRequireDefault(_entity);
+	
+	var _vector2d = __webpack_require__(64);
+	
+	var _vector2d2 = _interopRequireDefault(_vector2d);
+	
+	var _sprite = __webpack_require__(67);
+	
+	var _sprite2 = _interopRequireDefault(_sprite);
+	
+	var _rect = __webpack_require__(70);
+	
+	var _rect2 = _interopRequireDefault(_rect);
+	
+	var _color = __webpack_require__(71);
+	
+	var _color2 = _interopRequireDefault(_color);
+	
+	var _imageloader = __webpack_require__(68);
+	
+	var _imageloader2 = _interopRequireDefault(_imageloader);
+	
+	var _keyboardinput = __webpack_require__(65);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Classes = {
+	    Game: _game2.default,
+	    Emitter: _emitter2.default,
+	    Entity: _entity2.default,
+	    Sprite: _sprite2.default,
+	    Rect: _rect2.default,
+	    Vector2D: _vector2d2.default,
+	    Color: _color2.default,
+	    ImageLoader: _imageloader2.default
+	};
+	
+	var Consts = {
+	    Input: {
+	        Keys: _keyboardinput.KeyConsts
+	    }
+	};
+	
+	exports.default = {
+	    Classes: Classes,
+	    Consts: Consts
+	};
+
 /***/ }
 /******/ ]);
-//# sourceMappingURL=es5.js.map
+//# sourceMappingURL=particles.js.map

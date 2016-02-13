@@ -46,9 +46,9 @@ class Sprite extends Entity {
 
         if (this.isReady() && this._game) {
 
-            var imageObj = this._image.getImageObj();
+            let imageObj = this._image.getImageObj();
 
-            var subWidth = imageObj.width - this._imagePos.x,
+            let subWidth = imageObj.width - this._imagePos.x,
                 subHeight = imageObj.height - this._imagePos.y;
 
             this._game.context.drawImage(

@@ -26,7 +26,8 @@ var build = function (options, callback) {
 
     webpack({
         entry: {
-            "es5": path.join(__dirname, "src", "es5.js")
+            "es5": path.join(__dirname, "src", "es5.js"),
+            "particles": path.join(__dirname, "examples/particles", "particles.js")
         },
         bail: !options.watch,
         watch: options.watch,
@@ -41,7 +42,8 @@ var build = function (options, callback) {
                 loader: "babel-loader",
                 test: /\.js$/,
                 include: [
-                    path.join(__dirname, "src")
+                    path.join(__dirname, "src"),
+                    path.join(__dirname, "examples")
                 ],
                 query: {
                     plugins: ["transform-runtime"],
@@ -74,6 +76,15 @@ var build = function (options, callback) {
     });
 
 };
+
+
+gulp.task("move", () => {
+    gulp.src([
+        "./dist/particles.*"
+    ], {
+        base: "./dist"
+    }).pipe(gulp.dest("examples/particles/dist"));
+});
 
 
 gulp.task("build-dev", (callback) => {
