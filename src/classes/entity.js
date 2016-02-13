@@ -19,6 +19,8 @@ class Entity {
         this._game = null;
         this._parent = null;
 
+        this._creationTime = +(new Date());
+
     }
 
 
@@ -129,6 +131,12 @@ class Entity {
 
 
     _updateEntity (delta) {
+
+        if (this.timeToLive) {
+            if (+(new Date()) - this._creationTime > this.timeToLive) {
+                this._parent.detachChildEntity(this);
+            }
+        }
 
         // Calculate new position based on velocity and acceleration if there's one set
         if (this.velocity) {
