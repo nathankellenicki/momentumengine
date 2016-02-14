@@ -123,7 +123,7 @@ class Game extends Entity {
 
         self._wantPause = false;
 
-        var requestFrame = (() => {
+        let requestFrame = (() => {
 
             return (window.requestAnimationFrame ||
                 window.webkitRequestAnimationFrame ||
