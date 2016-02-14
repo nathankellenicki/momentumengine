@@ -195,6 +195,10 @@ class Entity {
 
         let rendered = this.render && this.render();
 
+        if (rendered) {
+            this._game._lastFrameTotalRenders++;
+        }
+
         if (rendered || (typeof rendered == "undefined") || (typeof this.render === "undefined")) {
 
             this.children.forEach((child) => {

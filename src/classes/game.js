@@ -95,6 +95,7 @@ class Game extends Entity {
 
         this._game = this;
         this._lastFrameTimestamp = 0;
+        this._lastFrameTotalRenders = 0;
         this._wantPause = true;
 
     }
@@ -146,8 +147,9 @@ class Game extends Entity {
             let currentTimestamp = +(new Date()),
                 delta = currentTimestamp - self._lastFrameTimestamp;
 
-            delta = Math.min(delta, 1000 / self.desiredFps);
+            //delta = Math.min(delta, 1000 / self.desiredFps);
             self._lastFrameTimestamp = currentTimestamp;
+            self._lastFrameTotalRenders = 0;
 
             self.step(delta);
 
