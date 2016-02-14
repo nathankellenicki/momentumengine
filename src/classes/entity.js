@@ -145,7 +145,7 @@ class Entity {
                 this.velocity.add(this.acceleration);
             }
 
-            this.pos.add(this.velocity);
+            this.pos.add(this.velocity.clone().multiply(delta));
 
         }
 
