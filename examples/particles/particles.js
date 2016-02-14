@@ -67,8 +67,7 @@ window.onload = function () {
         }
 
     };
-
-    //emitter.spread = Math.PI / 32;
+    
     emitter.setParticleParent(mainScene);
     emitter.emitting = true;
 
