@@ -67,7 +67,7 @@ window.onload = function () {
         }
 
     };
-    
+
     emitter.setParticleParent(mainScene);
     emitter.emitting = true;
 

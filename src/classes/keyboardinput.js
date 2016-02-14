@@ -119,7 +119,7 @@ class KeyboardInput {
 
 
     isPressed (keyCode) {
-    return !!this._keyState[keyCode];
+        return !!this._keyState[keyCode];
     }
 
 
