@@ -14,16 +14,13 @@ class Emitter extends Entity {
         this.particleVelocity = velocity;
         this.particleClass = particle;
 
-        this.emitRate = rate;
+        this.rate = rate;
         this.emitting = false;
+        this.spread = Math.PI;
         this._lastEmitTime = this._creationTime;
         this._wasEmitting = false;
 
-        this.particles = [];
-
-        this.spread = function () {
-            return Math.PI / 1;
-        }
+        this._particles = [];
 
     }
 
@@ -38,14 +35,14 @@ class Emitter extends Entity {
         let ParticleClass = this.particleClass,
             parent = this._particleParent || this._parent;
 
-        let angle = this.particleVelocity.angle() + this.spread() - (Math.random() * this.spread() * 2),
+        let angle = this.particleVelocity.angle() + this.spread - (Math.random() * this.spread * 2),
             magnitude = this.particleVelocity.length(),
             velocity = Vector2D.fromAngle(angle, magnitude);
 
         let particle = new ParticleClass(this._calculatedPos.x, this._calculatedPos.y);
         particle.velocity = velocity;
 
-        this.particles.push(particle);
+        //this._particles.push(particle);
         parent.addChildEntity(particle);
 
     }
@@ -66,13 +63,12 @@ class Emitter extends Entity {
                 this._lastEmitTime = currentTime;
             }
 
-            // In honour the code of Alex Evans
             let emitDelta = currentTime - this._lastEmitTime;
-            if (emitDelta > this.emitRate) {
+            if (emitDelta > this.rate) {
 
-                let emissions = ~~(emitDelta / this.emitRate);
+                let emissions = ~~(emitDelta / this.rate);
 
-                this._lastEmitTime = currentTime + (emitDelta - (this.emitRate * emissions));
+                this._lastEmitTime = currentTime + (emitDelta - (this.rate * emissions));
 
                 for (let i = 0; i < emissions; i++) {
                     this._emit();
