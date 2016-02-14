@@ -3,6 +3,8 @@
 import Entity from "./entity.js";
 import Vector2D from "./vector2d.js";
 
+import Utils from "../libs/utils";
+
 
 class Emitter extends Entity {
 
@@ -13,6 +15,7 @@ class Emitter extends Entity {
 
         this.particleVelocity = velocity;
         this.particleClass = particle;
+        this.particleFields = [];
 
         this.rate = rate;
         this.emitting = false;
@@ -41,6 +44,7 @@ class Emitter extends Entity {
 
         let particle = new ParticleClass(this._calculatedPos.x, this._calculatedPos.y);
         particle.velocity = velocity;
+        Utils.mergeIntoArray(particle.fields, this.particleFields);
 
         //this._particles.push(particle);
         parent.addChildEntity(particle);

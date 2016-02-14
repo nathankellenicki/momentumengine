@@ -2,6 +2,7 @@
 
 import Game from "./classes/game.js";
 import Emitter from "./classes/emitter.js";
+import Field from "./classes/field.js";
 import Entity from "./classes/entity.js";
 import Vector2D from "./classes/vector2d.js";
 import Sprite from "./classes/sprite.js";
@@ -13,14 +14,15 @@ import {KeyConsts} from "./classes/keyboardinput.js";
 
 
 const Classes = {
-    Game: Game,
-    Emitter: Emitter,
-    Entity: Entity,
-    Sprite: Sprite,
-    Rect: Rect,
-    Vector2D: Vector2D,
-    Color: Color,
-    ImageLoader: ImageLoader
+    Game,
+    Emitter,
+    Field,
+    Entity,
+    Sprite,
+    Rect,
+    Vector2D,
+    Color,
+    ImageLoader
 };
 
 

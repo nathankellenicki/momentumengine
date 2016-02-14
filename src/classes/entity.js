@@ -11,6 +11,8 @@ class Entity {
         this.velocity = new Vector2D(0, 0);
         this.acceleration = new Vector2D(0, 0);
 
+        this.fields = [];
+
         this.state = {};
         this.children = [];
 
@@ -130,6 +132,33 @@ class Entity {
     }
 
 
+    _calculateFields (delta) {
+
+        this._preprocess(); // NK: I don't like calling preprocess everywhere outside of the render method...
+
+        let acceleration = new Vector2D(0, 0);
+
+        for (let i = 0; i < this.fields.length; i++) {
+
+            let field = this.fields[i];
+            field._preprocess();
+
+            let vector = new Vector2D(
+                field._calculatedPos.x - this._calculatedPos.x,
+                field._calculatedPos.y - this._calculatedPos.y
+            );
+
+            let force = field.mass / Math.pow(vector.dot(vector), 1.5);
+
+            acceleration.add(vector.multiply(force).multiply(delta));
+
+        }
+
+        return this.acceleration.clone().add(acceleration);
+
+    }
+
+
     _updateEntity (delta) {
 
         if (this.timeToLive) {
@@ -139,12 +168,9 @@ class Entity {
         }
 
         // Calculate new position based on velocity and acceleration if there's one set
-        if (this.velocity) {
+        if (this.velocity && (this.velocity.x !== 0 || this.velocity.y !== 0)) {
 
-            if (this.acceleration) {
-                this.velocity.add(this.acceleration);
-            }
-
+            this.velocity.add(this._calculateFields(delta));
             this.pos.add(this.velocity.clone().multiply(delta));
 
         }
