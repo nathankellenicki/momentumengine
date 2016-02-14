@@ -43,7 +43,7 @@ window.onload = function () {
     particles.addChildEntity(mainScene);
 
     let rect = new MomentumEngine.Classes.Rect(width / 2 - baseSize, height / 2 - baseSize, baseSize * 2, baseSize * 2, red),
-        emitter = new MomentumEngine.Classes.Emitter(baseSize, baseSize, 4, new MomentumEngine.Classes.Vector2D(0, 1), BlueParticle);
+        emitter = new MomentumEngine.Classes.Emitter(baseSize, baseSize, 4, new MomentumEngine.Classes.Vector2D(0, 0.05), BlueParticle);
 
     mainScene.addChildEntity(rect);
     rect.addChildEntity(emitter);
