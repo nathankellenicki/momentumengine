@@ -54,6 +54,10 @@
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
+	var _createClass2 = __webpack_require__(15);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
 	var _possibleConstructorReturn2 = __webpack_require__(19);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
@@ -68,16 +72,26 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var white = new _es2.default.Classes.Color(255, 255, 255);
+	var KeyConsts = _es2.default.Consts.Input.Keys;
 	
 	var BlueParticle = function (_MomentumEngine$Class) {
 	    (0, _inherits3.default)(BlueParticle, _MomentumEngine$Class);
 	
 	    function BlueParticle(x, y) {
 	        (0, _classCallCheck3.default)(this, BlueParticle);
-	        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(BlueParticle).call(this, x, y, 1, 1, white));
+	
+	        var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(BlueParticle).call(this, x, y, 1, 1, new _es2.default.Classes.Color(255, 255, 255, 0)));
+	
+	        _this.timeToLive = 5000;
+	        return _this;
 	    }
 	
+	    (0, _createClass3.default)(BlueParticle, [{
+	        key: "update",
+	        value: function update(delta) {
+	            this.color.a = this.color.a - delta * 0.00025;
+	        }
+	    }]);
 	    return BlueParticle;
 	}(_es2.default.Classes.Rect);
 	
@@ -92,7 +106,10 @@
 	        width: width,
 	        height: height,
 	        fixRatio: true,
-	        desiredFps: 60
+	        desiredFps: 60,
+	        inputs: {
+	            keyboard: true
+	        }
 	    });
 	
 	    var black = new _es2.default.Classes.Color(0, 0, 0),
@@ -101,14 +118,32 @@
 	    var mainScene = new _es2.default.Classes.Rect(0, 0, width, height, black);
 	    particles.addChildEntity(mainScene);
 	
-	    var rect = new _es2.default.Classes.Rect(width / 10 - baseSize, height - baseSize * 10, baseSize * 2, baseSize * 2, red),
-	        emitter = new _es2.default.Classes.Emitter(baseSize, baseSize, 2, new _es2.default.Classes.Vector2D(1, 1), BlueParticle);
+	    var rect = new _es2.default.Classes.Rect(width / 2 - baseSize, height / 2 - baseSize, baseSize * 2, baseSize * 2, red),
+	        emitter = new _es2.default.Classes.Emitter(baseSize, baseSize, 4, new _es2.default.Classes.Vector2D(0, 1), BlueParticle);
 	
 	    mainScene.addChildEntity(rect);
 	    rect.addChildEntity(emitter);
-	    rect.setVelocity(0.01, 0);
-	    rect.setAcceleration(0.01, 0);
 	
+	    rect.update = function (delta) {
+	
+	        if (particles.inputs.keyboard.isPressed(KeyConsts.UP)) {
+	            rect.pos.y -= 0.2 * delta;
+	        }
+	
+	        if (particles.inputs.keyboard.isPressed(KeyConsts.DOWN)) {
+	            rect.pos.y += 0.2 * delta;
+	        }
+	
+	        if (particles.inputs.keyboard.isPressed(KeyConsts.LEFT)) {
+	            rect.pos.x -= 0.2 * delta;
+	        }
+	
+	        if (particles.inputs.keyboard.isPressed(KeyConsts.RIGHT)) {
+	            rect.pos.x += 0.2 * delta;
+	        }
+	    };
+	
+	    //emitter.spread = Math.PI / 32;
 	    emitter.setParticleParent(mainScene);
 	    emitter.emitting = true;
 	
@@ -1965,16 +2000,13 @@
 	        _this.particleVelocity = velocity;
 	        _this.particleClass = particle;
 	
-	        _this.emitRate = rate;
+	        _this.rate = rate;
 	        _this.emitting = false;
+	        _this.spread = Math.PI;
 	        _this._lastEmitTime = _this._creationTime;
 	        _this._wasEmitting = false;
 	
-	        _this.particles = [];
-	
-	        _this.spread = function () {
-	            return Math.PI / 1;
-	        };
+	        _this._particles = [];
 	
 	        return _this;
 	    }
@@ -1991,14 +2023,14 @@
 	            var ParticleClass = this.particleClass,
 	                parent = this._particleParent || this._parent;
 	
-	            var angle = this.particleVelocity.angle() + this.spread() - Math.random() * this.spread() * 2,
+	            var angle = this.particleVelocity.angle() + this.spread - Math.random() * this.spread * 2,
 	                magnitude = this.particleVelocity.length(),
 	                velocity = _vector2d2.default.fromAngle(angle, magnitude);
 	
 	            var particle = new ParticleClass(this._calculatedPos.x, this._calculatedPos.y);
 	            particle.velocity = velocity;
 	
-	            this.particles.push(particle);
+	            //this._particles.push(particle);
 	            parent.addChildEntity(particle);
 	        }
 	    }, {
@@ -2018,13 +2050,12 @@
 	                    this._lastEmitTime = currentTime;
 	                }
 	
-	                // In honour the code of Alex Evans
 	                var emitDelta = currentTime - this._lastEmitTime;
-	                if (emitDelta > this.emitRate) {
+	                if (emitDelta > this.rate) {
 	
-	                    var emissions = ~ ~(emitDelta / this.emitRate);
+	                    var emissions = ~ ~(emitDelta / this.rate);
 	
-	                    this._lastEmitTime = currentTime + (emitDelta - this.emitRate * emissions);
+	                    this._lastEmitTime = currentTime + (emitDelta - this.rate * emissions);
 	
 	                    for (var i = 0; i < emissions; i++) {
 	                        this._emit();

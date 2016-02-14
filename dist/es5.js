@@ -1954,16 +1954,13 @@
 	        _this.particleVelocity = velocity;
 	        _this.particleClass = particle;
 	
-	        _this.emitRate = rate;
+	        _this.rate = rate;
 	        _this.emitting = false;
+	        _this.spread = Math.PI;
 	        _this._lastEmitTime = _this._creationTime;
 	        _this._wasEmitting = false;
 	
-	        _this.particles = [];
-	
-	        _this.spread = function () {
-	            return Math.PI / 1;
-	        };
+	        _this._particles = [];
 	
 	        return _this;
 	    }
@@ -1980,14 +1977,14 @@
 	            var ParticleClass = this.particleClass,
 	                parent = this._particleParent || this._parent;
 	
-	            var angle = this.particleVelocity.angle() + this.spread() - Math.random() * this.spread() * 2,
+	            var angle = this.particleVelocity.angle() + this.spread - Math.random() * this.spread * 2,
 	                magnitude = this.particleVelocity.length(),
 	                velocity = _vector2d2.default.fromAngle(angle, magnitude);
 	
 	            var particle = new ParticleClass(this._calculatedPos.x, this._calculatedPos.y);
 	            particle.velocity = velocity;
 	
-	            this.particles.push(particle);
+	            //this._particles.push(particle);
 	            parent.addChildEntity(particle);
 	        }
 	    }, {
@@ -2007,13 +2004,12 @@
 	                    this._lastEmitTime = currentTime;
 	                }
 	
-	                // In honour the code of Alex Evans
 	                var emitDelta = currentTime - this._lastEmitTime;
-	                if (emitDelta > this.emitRate) {
+	                if (emitDelta > this.rate) {
 	
-	                    var emissions = ~ ~(emitDelta / this.emitRate);
+	                    var emissions = ~ ~(emitDelta / this.rate);
 	
-	                    this._lastEmitTime = currentTime + (emitDelta - this.emitRate * emissions);
+	                    this._lastEmitTime = currentTime + (emitDelta - this.rate * emissions);
 	
 	                    for (var i = 0; i < emissions; i++) {
 	                        this._emit();
