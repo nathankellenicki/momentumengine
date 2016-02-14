@@ -25,7 +25,7 @@ window.onload = function () {
         height = 360,
         baseSize = width / 64;
 
-    let particles = new MomentumEngine.Classes.Game({
+    let particleDemo = new MomentumEngine.Classes.Game({
         canvas: document.getElementById("canvas"),
         width: width,
         height: height,
@@ -41,50 +41,50 @@ window.onload = function () {
         blue = new MomentumEngine.Classes.Color(0, 0, 255);
 
     let mainScene = new MomentumEngine.Classes.Rect(0, 0, width, height, black);
-    particles.addChildEntity(mainScene);
+    particleDemo.addChildEntity(mainScene);
 
-    let rect = new MomentumEngine.Classes.Rect(width / 8 - baseSize, height / 2 - baseSize, baseSize * 2, baseSize * 2, red),
+    let emitterRect = new MomentumEngine.Classes.Rect(width / 8 - baseSize, height / 2 - baseSize, baseSize * 2, baseSize * 2, red),
         emitter = new MomentumEngine.Classes.Emitter(baseSize, baseSize, 4, new MomentumEngine.Classes.Vector2D(0, 0.05), BlueParticle);
 
-    let fieldRect = new MomentumEngine.Classes.Rect(width - (baseSize * 33), height - (baseSize * 11), baseSize * 2, baseSize * 2, blue),
-        field = new MomentumEngine.Classes.Field(baseSize, baseSize, 0.1);
+    let bottomFieldRect = new MomentumEngine.Classes.Rect(width - (baseSize * 33), height - (baseSize * 11), baseSize * 2, baseSize * 2, blue),
+        bottomField = new MomentumEngine.Classes.Field(baseSize, baseSize, 0.1);
 
-    let fieldRect2 = new MomentumEngine.Classes.Rect(width - (baseSize * 33), baseSize * 9, baseSize * 2, baseSize * 2, blue),
-        field2 = new MomentumEngine.Classes.Field(baseSize, baseSize, 0.1);
+    let topFieldRect = new MomentumEngine.Classes.Rect(width - (baseSize * 33), baseSize * 9, baseSize * 2, baseSize * 2, blue),
+        topField = new MomentumEngine.Classes.Field(baseSize, baseSize, 0.1);
 
-    mainScene.addChildEntity(rect);
-    rect.addChildEntity(emitter);
+    mainScene.addChildEntity(emitterRect);
+    emitterRect.addChildEntity(emitter);
 
-    mainScene.addChildEntity(fieldRect);
-    fieldRect.addChildEntity(field);
-    mainScene.addChildEntity(fieldRect2);
-    fieldRect2.addChildEntity(field2);
+    mainScene.addChildEntity(bottomFieldRect);
+    bottomFieldRect.addChildEntity(bottomField);
+    mainScene.addChildEntity(topFieldRect);
+    topFieldRect.addChildEntity(topField);
 
-    rect.update = function (delta) {
+    emitterRect.update = function (delta) {
 
-        if (particles.inputs.keyboard.isPressed(KeyConsts.UP)) {
-            rect.pos.y -= (0.2 * delta);
+        if (particleDemo.inputs.keyboard.isPressed(KeyConsts.UP)) {
+            emitterRect.pos.y -= (0.2 * delta);
         }
 
-        if (particles.inputs.keyboard.isPressed(KeyConsts.DOWN)) {
-            rect.pos.y += (0.2 * delta);
+        if (particleDemo.inputs.keyboard.isPressed(KeyConsts.DOWN)) {
+            emitterRect.pos.y += (0.2 * delta);
         }
 
-        if (particles.inputs.keyboard.isPressed(KeyConsts.LEFT)) {
-            rect.pos.x -= (0.2 * delta);
+        if (particleDemo.inputs.keyboard.isPressed(KeyConsts.LEFT)) {
+            emitterRect.pos.x -= (0.2 * delta);
         }
 
-        if (particles.inputs.keyboard.isPressed(KeyConsts.RIGHT)) {
-            rect.pos.x += (0.2 * delta);
+        if (particleDemo.inputs.keyboard.isPressed(KeyConsts.RIGHT)) {
+            emitterRect.pos.x += (0.2 * delta);
         }
 
     };
 
     emitter.setParticleParent(mainScene);
-    emitter.particleFields.push(field, field2);
+    emitter.particleFields.push(bottomField, topField);
     emitter.spread = Math.PI / 8;
     emitter.emitting = true;
 
-    particles.start();
+    particleDemo.start();
 
 };
