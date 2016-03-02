@@ -16,13 +16,41 @@ class Entity {
         this.state = {};
         this.children = [];
 
-        this._calculatedPos = this.pos.clone();
+        this._relativePos = this.pos.clone();
         this._lastCalculated = 0;
         this._game = null;
         this._parent = null;
 
         this._creationTime = +(new Date());
 
+    }
+
+
+    get x () {
+        return this.pos.x;
+    }
+
+    set x (val) {
+        return this.pos.x = val;
+    }
+
+
+    get y () {
+        return this.pos.y;
+    }
+
+    set y (val) {
+        return this.pos.y = val;
+    }
+
+
+    get relativeX () {
+        return this._calculateRelativePos().x;
+    }
+
+
+    get relativeY () {
+        return this._calculateRelativePos().y;
     }
 
 
@@ -90,33 +118,31 @@ class Entity {
     }
 
 
-    _preprocess () {
+    _calculateRelativePos () {
 
-        // NK: The purpose of this function is to calculate the true position of the entity relative to all its parents. It does this recursively, calling the _preprocess method all the way back up the tree and continuously adding the results together.
+        // NK: The purpose of this function is to calculate the true position of the entity relative to all its parents. It does this recursively, calling the _calculateRelativePos method all the way back up the tree and continuously adding the results together.
 
         // Note there is a limiter, where the last calculated frame is stored, so that if the position has already been calculated for that node in this particular frame, the cached result is used rather than recalculating.
 
-        // When rendering, the draw calls should use this._calculatedPos rather than this.pos in order for the position to be correct.
+        // When rendering, the draw calls should use this._relativePos rather than this.pos in order for the position to be correct.
 
         if (this._game && this._lastCalculated < this._game.frameCounter) {
 
             if (this._parent) {
 
-                let parentPos = this._parent._preprocess();
-
-                this._calculatedPos.x = this.pos.x + parentPos.x;
-                this._calculatedPos.y = this.pos.y + parentPos.y;
+                this._relativePos.x = this.x + this._parent.relativeX;
+                this._relativePos.y = this.y + this._parent.relativeY;
 
             } else {
-                this._calculatedPos.x = this.pos.x;
-                this._calculatedPos.y = this.pos.y;
+                this._relativePos.x = this.x;
+                this._relativePos.y = this.y;
             }
 
             this._lastCalculated = this._game.frameCounter;
 
         }
 
-        return this._calculatedPos;
+        return this._relativePos;
 
     }
 
@@ -134,18 +160,16 @@ class Entity {
 
     _calculateFields (delta) {
 
-        this._preprocess(); // NK: I don't like calling preprocess everywhere outside of the render method...
-
         let acceleration = new Vector2D(0, 0);
 
         for (let i = 0; i < this.fields.length; i++) {
 
             let field = this.fields[i];
-            field._preprocess();
 
+            // NK: These call _relativePos, I don't like using this outside of the render method...
             let vector = new Vector2D(
-                field._calculatedPos.x - this._calculatedPos.x,
-                field._calculatedPos.y - this._calculatedPos.y
+                field.relativeX - this.relativeX,
+                field.relativeY - this.relativeY
             );
 
             let force = field.mass / Math.pow(vector.dot(vector), 1.5);
@@ -190,8 +214,6 @@ class Entity {
 
 
     _renderEntity () {
-
-        this._preprocess();
 
         let rendered = this.render && this.render();
 

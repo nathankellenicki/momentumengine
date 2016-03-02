@@ -42,7 +42,8 @@ class Emitter extends Entity {
             magnitude = this.particleVelocity.length(),
             velocity = Vector2D.fromAngle(angle, magnitude);
 
-        let particle = new ParticleClass(this._calculatedPos.x, this._calculatedPos.y);
+        // NK: This might cause a bug where child renders have an incorrect position because preprocess should normally be called after the update function but before the render, here it is before update. We'll see.
+        let particle = new ParticleClass(this.relativeX, this.relativeY);
         particle.velocity = velocity;
         Utils.mergeIntoArray(particle.fields, this.particleFields);
 
@@ -53,10 +54,6 @@ class Emitter extends Entity {
 
 
     _triggerEmissions () {
-
-        // We prematurely call preprocess so that child particles can spawn from the emitters permission but be children of a different parent
-        // NK: This might cause a bug where child renders have an incorrect position because preprocess should normally be called after the update function but before the render, here it is before update. We'll see.
-        this._preprocess();
 
         if (this.emitting) {
 

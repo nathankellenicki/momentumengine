@@ -33,7 +33,7 @@ class Rect extends Entity {
         if (this._game) {
 
             this._game.context.fillStyle = this.color.toString();
-            this._game.context.fillRect(this._calculatedPos.x, this._calculatedPos.y, this.size.x, this.size.y);
+            this._game.context.fillRect(this.relativeX, this.relativeY, this.size.x, this.size.y);
 
             return true;
 
