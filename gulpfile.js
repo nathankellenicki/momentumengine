@@ -6,6 +6,31 @@ var gulp = require("gulp"),
     webpack = require("webpack");
 
 
+let minify = true,
+    watch = false,
+    examples = [
+        "fire",
+        "particles",
+        "pong",
+        "snowflakes"
+    ];
+
+
+process.argv.forEach((arg) => {
+
+    if (arg == "--dev" || arg == "-d") {
+        minify = false;
+        gutil.log("[Momentum Engine] dev flag passed, enabled");
+    }
+
+    if (arg == "--watch" || arg == "-w") {
+        watch = true;
+        gutil.log("[Momentum Engine] watch flag passed, enabled");
+    }
+
+});
+
+
 var build = function (options, callback) {
 
     let plugins = [];
@@ -25,16 +50,13 @@ var build = function (options, callback) {
     }
 
     webpack({
-        entry: {
-            "es5": path.join(__dirname, "src", "es5.js"),
-            "particles": path.join(__dirname, "examples/particles", "particles.js")
-        },
+        entry: options.entry,
         bail: !options.watch,
         watch: options.watch,
         devtool: "source-map",
         plugins: plugins,
         output: {
-            path: path.join(__dirname, "dist"),
+            path: options.path,
             filename: "[name].js"
         },
         module: {
@@ -78,34 +100,37 @@ var build = function (options, callback) {
 };
 
 
-gulp.task("move", () => {
-    gulp.src([
-        "./dist/particles.*"
-    ], {
-        base: "./dist"
-    }).pipe(gulp.dest("examples/particles/dist"));
+examples.forEach((example) => {
+
+
+    let entry = {};
+    entry[example] = path.join(__dirname, "examples", example, `${example}.js`);
+
+
+    gulp.task(`${example}-example`, (callback) => {
+
+        build({
+            entry: entry,
+            path: path.join(__dirname, "examples", example, "dist"),
+            watch: watch,
+            minify: minify
+        }, callback);
+    });
+
+
 });
 
 
-gulp.task("build-dev", (callback) => {
-    build({
-        watch: false,
-        minify: false
-    }, callback);
-});
+gulp.task("examples", examples.map((example) => { return `${example}-example`; }));
 
 
 gulp.task("build", (callback) => {
     build({
-        watch: false,
-        minify: true
+        entry: {
+            "es5": path.join(__dirname, "src", "es5.js")
+        },
+        path: path.join(__dirname, "dist"),
+        watch: watch,
+        minify: minify
     }, callback);
-});
-
-
-gulp.task("watch", () => {
-    build({
-        watch: true,
-        minify: false
-    });
 });

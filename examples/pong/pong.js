@@ -1,9 +1,11 @@
 "use strict";
 
+import MomentumEngine from "../../src/es6";
+
+let KeyConsts = MomentumEngine.Consts.Input.Keys;
+
+
 window.onload = function () {
-
-
-    var KeyConsts = MomentumEngine.Consts.Input.Keys;
 
 
     var width = 640,
