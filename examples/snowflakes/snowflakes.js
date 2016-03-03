@@ -45,14 +45,14 @@ window.onload = function () {
             var newSnowflake = new MomentumEngine.Classes.Sprite(startPos, -100, 100, 100, snowflakeImg);
 
             newSnowflake.update = function () {
-                this.pos.y = this.pos.y + (delta * 0.06);
+                this.top = this.top + (delta * 0.06);
             };
 
             mainScene.addChildEntity(newSnowflake);
 
             mainScene.children.forEach(function (oldSnowflake) {
 
-                if (oldSnowflake.pos.y > height) {
+                if (oldSnowflake.top > height) {
                     // Clean up snowflakes that are no longer visible
                     mainScene.detachChildEntity(oldSnowflake);
                 }

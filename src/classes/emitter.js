@@ -43,7 +43,7 @@ class Emitter extends Entity {
             velocity = Vector2D.fromAngle(angle, magnitude);
 
         // NK: This might cause a bug where child renders have an incorrect position because preprocess should normally be called after the update function but before the render, here it is before update. We'll see.
-        let particle = new ParticleClass(this.relativeX, this.relativeY);
+        let particle = new ParticleClass(this.relativeLeft, this.relativeTop);
         particle.velocity = velocity;
         Utils.mergeIntoArray(particle.fields, this.particleFields);
 

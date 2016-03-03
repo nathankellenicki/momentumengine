@@ -9,10 +9,12 @@ class CollisionMethods {
             throw new Error("AABB collisions can only be checked on these entity types: Rect");
         }
 
-        return (entity1.x < entity2.x + entity2.size.x &&
-            entity1.x + entity1.size.x > entity2.x &&
-            entity1.y < entity2.y + entity2.size.y &&
-            entity1.size.y + entity1.y > entity2.y);
+        let colliding = (entity1.left < entity2.left + entity2.width &&
+            entity1.left + entity1.width > entity2.left &&
+            entity1.top < entity2.top + entity2.height &&
+            entity1.height + entity1.top > entity2.top);
+
+        return colliding;
 
     }
 

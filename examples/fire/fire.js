@@ -52,18 +52,18 @@ class FireParticle extends MomentumEngine.Classes.Entity {
     render () {
 
         var gradient = this._game.context.createRadialGradient(
-            this._relativePos.x + fireParticleWidth / 2,
-            this._relativePos.y + fireParticleHeight / 2,
+            this.relativeLeft + fireParticleWidth / 2,
+            this.relativeTop + fireParticleHeight / 2,
             fireParticleWidth / 10,
-            this._relativePos.x + fireParticleWidth / 2,
-            this._relativePos.y + fireParticleHeight / 2,
+            this.relativeLeft + fireParticleWidth / 2,
+            this.relativeTop + fireParticleHeight / 2,
             fireParticleWidth / 2
         );
 
         gradient.addColorStop(0, this.startColor.toString());
         gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
         this._game.context.fillStyle = gradient;
-        this._game.context.fillRect(this._relativePos.x, this._relativePos.y, fireParticleWidth, fireParticleHeight);
+        this._game.context.fillRect(this.relativeLeft, this.relativeTop, fireParticleWidth, fireParticleHeight);
 
         return true;
 

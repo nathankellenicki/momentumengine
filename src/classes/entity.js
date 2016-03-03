@@ -10,6 +10,7 @@ class Entity {
         this.pos = new Vector2D(x || 0, y || 0);
         this.velocity = new Vector2D(0, 0);
         this.acceleration = new Vector2D(0, 0);
+        this.size = new Vector2D(0, 0);
 
         this.fields = [];
 
@@ -26,31 +27,51 @@ class Entity {
     }
 
 
-    get x () {
+    get left () {
         return this.pos.x;
     }
 
-    set x (val) {
+    set left (val) {
         return this.pos.x = val;
     }
 
 
-    get y () {
+    get top () {
         return this.pos.y;
     }
 
-    set y (val) {
+    set top (val) {
         return this.pos.y = val;
     }
 
 
-    get relativeX () {
+    get relativeLeft () {
         return this._calculateRelativePos().x;
     }
 
 
-    get relativeY () {
+    get relativeTop () {
         return this._calculateRelativePos().y;
+    }
+
+
+    get width () {
+        return this.size.x;
+    }
+
+
+    set width (width) {
+        return this.size.x = width;
+    }
+
+
+    get height () {
+        return this.size.y;
+    }
+
+
+    set height (height) {
+        return this.size.y = height;
     }
 
 
@@ -130,12 +151,12 @@ class Entity {
 
             if (this._parent) {
 
-                this._relativePos.x = this.x + this._parent.relativeX;
-                this._relativePos.y = this.y + this._parent.relativeY;
+                this._relativePos.x = this.pos.x + this._parent.relativeLeft;
+                this._relativePos.y = this.pos.y + this._parent.relativeTop;
 
             } else {
-                this._relativePos.x = this.x;
-                this._relativePos.y = this.y;
+                this._relativePos.x = this.pos.x;
+                this._relativePos.y = this.pos.y;
             }
 
             this._lastCalculated = this._game.frameCounter;
@@ -168,8 +189,8 @@ class Entity {
 
             // NK: These call _relativePos, I don't like using this outside of the render method...
             let vector = new Vector2D(
-                field.relativeX - this.relativeX,
-                field.relativeY - this.relativeY
+                field.relativeLeft - this.relativeLeft,
+                field.relativeTop - this.relativeTop
             );
 
             let force = field.mass / Math.pow(vector.dot(vector), 1.5);

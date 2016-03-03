@@ -13,7 +13,8 @@ class Rect extends Entity {
 
         super(x, y);
 
-        this.size = new Vector2D(width, height);
+        this.size.x = width || 0;
+        this.size.y = height || 0;
         this.color = color;
 
     }
@@ -33,7 +34,7 @@ class Rect extends Entity {
         if (this._game) {
 
             this._game.context.fillStyle = this.color.toString();
-            this._game.context.fillRect(this.relativeX, this.relativeY, this.size.x, this.size.y);
+            this._game.context.fillRect(this.relativeLeft, this.relativeTop, this.width, this.height);
 
             return true;
 

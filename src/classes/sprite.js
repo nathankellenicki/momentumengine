@@ -18,7 +18,8 @@ class Sprite extends Entity {
 
         super(x, y);
 
-        this.size = new Vector2D(width || 0, height || 0);
+        this.size.x = width || 0;
+        this.size.y = height || 0;
 
         this._image = image;
         this._imagePos = new Vector2D(0, 0);
@@ -57,10 +58,10 @@ class Sprite extends Entity {
                 this._imagePos.y,
                 this._imageSize.x || subWidth,
                 this._imageSize.y || subHeight,
-                this.relativeX,
-                this.relativeY,
-                this.size.x || subWidth,
-                this.size.y || subHeight
+                this.relativeLeft,
+                this.relativeTop,
+                this.width || subWidth,
+                this.height || subHeight
             );
 
             return true;

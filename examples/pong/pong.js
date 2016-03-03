@@ -51,11 +51,11 @@ window.onload = function () {
 
         this.pos.add(this.state.speed.clone().multiply(delta));
 
-        if ((this.pos.x + baseSize > width && this.state.speed.x > 0) || (this.pos.x < 0 && this.state.speed.x < 0)) {
+        if ((this.left + baseSize > width && this.state.speed.x > 0) || (this.left < 0 && this.state.speed.x < 0)) {
             this.state.speed.x = -this.state.speed.x;
         }
 
-        if ((this.pos.y + baseSize > height && this.state.speed.y > 0) || (this.pos.y < 0 && this.state.speed.y < 0)) {
+        if ((this.top + baseSize > height && this.state.speed.y > 0) || (this.top < 0 && this.state.speed.y < 0)) {
             this.state.speed.y = -this.state.speed.y;
         }
 
@@ -73,12 +73,12 @@ window.onload = function () {
             leftPaddle.pos.y += (0.5 * delta);
         }
 
-        if (leftPaddle.pos.y > height - (baseSize * 8)) {
-            leftPaddle.pos.y = height - (baseSize * 8);
+        if (leftPaddle.top > height - (baseSize * 8)) {
+            leftPaddle.top = height - (baseSize * 8);
         }
 
-        if (leftPaddle.pos.y < baseSize) {
-            leftPaddle.pos.y = baseSize;
+        if (leftPaddle.top < baseSize) {
+            leftPaddle.top = baseSize;
         }
 
         if (leftPaddle.isCollidingWith(ball) && ball.state.speed.x < 0) {
@@ -99,11 +99,11 @@ window.onload = function () {
             rightPaddle.pos.y += (0.5 * delta);
         }
 
-        if (rightPaddle.pos.y > height - (baseSize * 8)) {
+        if (rightPaddle.pos.top > height - (baseSize * 8)) {
             rightPaddle.pos.y = height - (baseSize * 8);
         }
 
-        if (rightPaddle.pos.y < baseSize) {
+        if (rightPaddle.pos.top < baseSize) {
             rightPaddle.pos.y = baseSize;
         }
 
