@@ -66,11 +66,11 @@ window.onload = function () {
     leftPaddle.update = function (delta) {
 
         if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_Q) || pong.inputs.keyboard.isPressed(KeyConsts.UP)) {
-            leftPaddle.pos.y -= (0.5 * delta);
+            leftPaddle.top -= (0.5 * delta);
         }
 
         if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_A) || pong.inputs.keyboard.isPressed(KeyConsts.DOWN)) {
-            leftPaddle.pos.y += (0.5 * delta);
+            leftPaddle.top += (0.5 * delta);
         }
 
         if (leftPaddle.top > height - (baseSize * 8)) {
@@ -92,19 +92,19 @@ window.onload = function () {
     rightPaddle.update = function (delta) {
 
         if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_O)) {
-            rightPaddle.pos.y -= (0.5 * delta);
+            rightPaddle.top -= (0.5 * delta);
         }
 
         if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_L)) {
-            rightPaddle.pos.y += (0.5 * delta);
+            rightPaddle.top += (0.5 * delta);
         }
 
-        if (rightPaddle.pos.top > height - (baseSize * 8)) {
-            rightPaddle.pos.y = height - (baseSize * 8);
+        if (rightPaddle.top > height - (baseSize * 8)) {
+            rightPaddle.top = height - (baseSize * 8);
         }
 
-        if (rightPaddle.pos.top < baseSize) {
-            rightPaddle.pos.y = baseSize;
+        if (rightPaddle.top < baseSize) {
+            rightPaddle.top = baseSize;
         }
 
         if (rightPaddle.isCollidingWith(ball) && ball.state.speed.x > 0) {

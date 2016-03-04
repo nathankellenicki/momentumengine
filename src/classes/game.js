@@ -1,6 +1,7 @@
 "use strict";
 
 import Entity from "./entity.js";
+import Vector2D from "./vector2d.js";
 import KeyboardInput from "./keyboardinput.js";
 
 class Game extends Entity {
@@ -97,6 +98,26 @@ class Game extends Entity {
         this._lastFrameTimestamp = 0;
         this._lastFrameTotalRenders = 0;
         this._wantPause = true;
+
+    }
+
+
+    setCamera (x, y) {
+
+        if (x instanceof Vector2D) {
+
+            let pos = x.clone();
+            pos.x = -pos.x;
+            pos.y = -pos.y;
+
+            this.pos = pos;
+
+        } else {
+
+            this.pos.x = -x;
+            this.pos.y = -y;
+
+        }
 
     }
 
