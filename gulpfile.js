@@ -124,7 +124,7 @@ examples.forEach((example) => {
 gulp.task("examples", examples.map((example) => { return `${example}-example`; }));
 
 
-gulp.task("build", (callback) => {
+gulp.task("engine", (callback) => {
     build({
         entry: {
             "es5": path.join(__dirname, "src", "es5.js")
@@ -134,3 +134,7 @@ gulp.task("build", (callback) => {
         minify: minify
     }, callback);
 });
+
+
+gulp.task("build", ["engine", "examples"]);
+gulp.task("default", ["build"]);

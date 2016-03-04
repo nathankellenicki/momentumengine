@@ -4,6 +4,8 @@
   "description": "An ES6 game and animation engine.",
   "main": "src/es6.js",
   "scripts": {
+    "postinstall": "gulp build",
+    "build": "gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Nathan Kunicki <me@nathankunicki.com>",
