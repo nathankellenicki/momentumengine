@@ -2,7 +2,9 @@
 
 import Entity from "./entity.js";
 import Vector2D from "./vector2d.js";
+
 import KeyboardInput from "./keyboardinput.js";
+import GamepadInput from "./gamepadinput.js";
 
 class Game extends Entity {
 
@@ -62,8 +64,8 @@ class Game extends Entity {
             this.canvas.width = this.width * this.scale;
             this.canvas.height = this.height * this.scale;
 
-            this.canvas.style.width = this.width + "px";
-            this.canvas.style.height = this.height + "px";
+            this.canvas.style.width = `${this.width}px`;
+            this.canvas.style.height = `${this.height}px`;
 
             // Call getContext last for Ejecta only.
             if (typeof ejecta !== "undefined") {
@@ -89,9 +91,16 @@ class Game extends Entity {
         // Initialize defaults
         this.frameCounter = 0;
 
+
+        // Initialize input methods
         this.inputs = {};
+
         if (config.inputs.keyboard) {
             this.inputs.keyboard = new KeyboardInput(this);
+        }
+
+        if (config.inputs.gamepad) {
+            this.inputs.gamepad = new GamepadInput(this);
         }
 
         this._game = this;
