@@ -8,6 +8,8 @@ import Vector2D from "./classes/vector2d.js";
 import Sprite from "./classes/sprite.js";
 import Rect from "./classes/rect.js";
 import Color from "./classes/color.js";
+import Text from "./classes/text.js";
+import Font from "./classes/font.js";
 import ImageLoader from "./classes/imageloader.js";
 
 import {KeyConsts} from "./classes/keyboardinput.js";
@@ -22,6 +24,8 @@ const Classes = {
     Rect,
     Vector2D,
     Color,
+    Text,
+    Font,
     ImageLoader
 };
 

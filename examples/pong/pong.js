@@ -10,7 +10,10 @@ let width = 640,
     baseSize = width / 64;
 
 let white = new MomentumEngine.Classes.Color(255, 255, 255),
-    black = new MomentumEngine.Classes.Color(0, 0, 0);
+    black = new MomentumEngine.Classes.Color(0, 0, 0),
+    red = new MomentumEngine.Classes.Color(255, 0, 0);
+
+let font = new MomentumEngine.Classes.Font("Arial", "32px", white, red);
 
 
 class Ball extends MomentumEngine.Classes.Rect {
@@ -20,6 +23,8 @@ class Ball extends MomentumEngine.Classes.Rect {
 
         super(startingLeft, startingTop, baseSize, baseSize, white);
 
+        this.startingLeft = startingLeft;
+        this.startingTop = startingTop;
         this.speed = new MomentumEngine.Classes.Vector2D(0.1, 0.05); // Starting ball speed
 
     }
@@ -29,8 +34,18 @@ class Ball extends MomentumEngine.Classes.Rect {
 
         this.pos.add(this.speed.clone().multiply(delta));
 
-        if ((this.left + baseSize > width && this.speed.x > 0) || (this.left < 0 && this.speed.x < 0)) {
-            this.speed.x = -this.speed.x;
+        if (this.left + baseSize > width && this.speed.x > 0) {
+
+            this.left = this.startingLeft;
+            this.top = this.startingTop;
+            this.game.leftScoreboard.increment();
+
+        } else if (this.left < 0 && this.speed.x < 0) {
+
+            this.left = this.startingLeft;
+            this.top = this.startingTop;
+            this.game.rightScoreboard.increment();
+
         }
 
         if ((this.top + baseSize > height && this.speed.y > 0) || (this.top < 0 && this.speed.y < 0)) {
@@ -52,6 +67,7 @@ class Paddle extends MomentumEngine.Classes.Rect {
 
         this.keyUp = keys.up;
         this.keyDown = keys.down;
+        this.scoreboard = null;
 
     }
 
@@ -76,6 +92,25 @@ class Paddle extends MomentumEngine.Classes.Rect {
             }
         });
 
+    }
+
+
+}
+
+
+class Scoreboard extends MomentumEngine.Classes.Text {
+
+
+    constructor (posLeft) {
+        super(posLeft, 35, font);
+        this.score = 0;
+        this.text = "Score: 0";
+    }
+
+
+    increment () {
+        this.score++;
+        this.text = `Score: ${this.score}`;
     }
 
 
@@ -107,7 +142,19 @@ class Pong extends MomentumEngine.Classes.Game {
     }
 
 
+    setLeftScoreboard (scoreboard) {
+        this.leftScoreboard = scoreboard;
+        this.addChildEntity(scoreboard);
+    }
+
+    setRightScoreboard (scoreboard) {
+        this.rightScoreboard = scoreboard;
+        this.addChildEntity(scoreboard);
+    }
+
+
     addBall (ball) {
+        ball.game = this;
         this.balls.push(ball);
         this.addChildEntity(ball);
     }
@@ -139,10 +186,18 @@ window.onload = function () {
         down: KeyConsts.CHAR_L
     });
 
+    var leftScoreboard = new Scoreboard(baseSize),
+        rightScoreboard = new Scoreboard(width - baseSize);
+
+    rightScoreboard.textAlign = "right"; // Right align the text of the right scoreboard
+
     // Create scene graph
     pong.addBall(ball);
     pong.addPaddle(leftPaddle);
     pong.addPaddle(rightPaddle);
+
+    pong.setLeftScoreboard(leftScoreboard);
+    pong.setRightScoreboard(rightScoreboard);
 
     pong.start();
 

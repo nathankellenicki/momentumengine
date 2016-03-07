@@ -5,9 +5,9 @@ import Vector2D from "./vector2d.js";
 class Entity {
 
 
-    constructor (x, y) {
+    constructor (x = 0, y = 0) {
 
-        this.pos = new Vector2D(x || 0, y || 0);
+        this.pos = new Vector2D(x, y);
         this.velocity = new Vector2D(0, 0);
         this.acceleration = new Vector2D(0, 0);
         this.size = new Vector2D(0, 0);
