@@ -2,117 +2,147 @@
 
 import MomentumEngine from "../../src/es6";
 
+
 let KeyConsts = MomentumEngine.Consts.Input.Keys;
+
+let width = 640,
+    height = 360,
+    baseSize = width / 64;
+
+let white = new MomentumEngine.Classes.Color(255, 255, 255),
+    black = new MomentumEngine.Classes.Color(0, 0, 0);
+
+
+class Ball extends MomentumEngine.Classes.Rect {
+
+
+    constructor (startingLeft, startingTop) {
+
+        super(startingLeft, startingTop, baseSize, baseSize, white);
+
+        this.speed = new MomentumEngine.Classes.Vector2D(0.1, 0.05); // Starting ball speed
+
+    }
+
+
+    update (delta) {
+
+        this.pos.add(this.speed.clone().multiply(delta));
+
+        if ((this.left + baseSize > width && this.speed.x > 0) || (this.left < 0 && this.speed.x < 0)) {
+            this.speed.x = -this.speed.x;
+        }
+
+        if ((this.top + baseSize > height && this.speed.y > 0) || (this.top < 0 && this.speed.y < 0)) {
+            this.speed.y = -this.speed.y;
+        }
+
+    }
+
+
+}
+
+
+class Paddle extends MomentumEngine.Classes.Rect {
+
+
+    constructor (posLeft, keys) {
+
+        super(posLeft, baseSize, baseSize, baseSize * 7, white);
+
+        this.keyUp = keys.up;
+        this.keyDown = keys.down;
+
+    }
+
+
+    update (delta) {
+
+        if (this._game.inputs.keyboard.isPressed(this.keyUp)) {
+            this.top -= (0.5 * delta);
+        } else if (this._game.inputs.keyboard.isPressed(this.keyDown)) {
+            this.top += (0.5 * delta);
+        }
+
+        if (this.top > height - (baseSize * 8)) {
+            this.top = height - (baseSize * 8);
+        } else if (this.top < baseSize) {
+            this.top = baseSize;
+        }
+
+        this.balls.forEach((ball) => {
+            if (this.isCollidingWith(ball)) {
+                ball.speed.x = -ball.speed.x;
+            }
+        });
+
+    }
+
+
+}
+
+
+class Pong extends MomentumEngine.Classes.Game {
+
+
+    constructor (canvas, width, height) {
+
+        super({
+            canvas: canvas,
+            width: width,
+            height: height,
+            fixRatio: true,
+            desiredFps: 60,
+            inputs: {
+                keyboard: true
+            }
+        });
+
+        let background = new MomentumEngine.Classes.Rect(0, 0, width, height, black);
+        this.addChildEntity(background);
+
+        this.balls = [];
+        this.paddles = [];
+
+    }
+
+
+    addBall (ball) {
+        this.balls.push(ball);
+        this.addChildEntity(ball);
+    }
+
+
+    addPaddle (paddle) {
+        this.paddles.push(paddle);
+        this.addChildEntity(paddle);
+        paddle.balls = this.balls;
+    }
+
+
+}
 
 
 window.onload = function () {
 
+    var pong = new Pong(document.getElementById("canvas"), width, height);
 
-    var width = 640,
-        height = 360,
-        baseSize = width / 64;
+    var ball = new Ball((width / 2) - (baseSize / 2), (height / 2) - (baseSize / 2));
 
-
-    var pong = new MomentumEngine.Classes.Game({
-        canvas: document.getElementById("canvas"),
-        width: width,
-        height: height,
-        fixRatio: true,
-        desiredFps: 60,
-        inputs: {
-            keyboard: true
-        }
+    var leftPaddle = new Paddle(baseSize, {
+        up: KeyConsts.CHAR_Q,
+        down: KeyConsts.CHAR_A
     });
 
-
-    // Colors
-    var white = new MomentumEngine.Classes.Color(255, 255, 255),
-        black = new MomentumEngine.Classes.Color(0, 0, 0);
-
-
-    // All of these are instances of MomentumEngine.Classes.Entity
-    var mainScene = new MomentumEngine.Classes.Rect(0, 0, width, height, black),
-        ball = new MomentumEngine.Classes.Rect((width / 2) - (baseSize / 2), (height / 2) - (baseSize / 2), baseSize, baseSize, white),
-        leftPaddle = new MomentumEngine.Classes.Rect(baseSize, baseSize, baseSize, baseSize * 7, white),
-        rightPaddle = new MomentumEngine.Classes.Rect(width - (baseSize * 2), baseSize, baseSize, baseSize * 7, white);
-
+    var rightPaddle = new Paddle(width - (baseSize * 2), {
+        up: KeyConsts.CHAR_O,
+        down: KeyConsts.CHAR_L
+    });
 
     // Create scene graph
-    pong.addChildEntity(mainScene);
-    mainScene.addChildEntity(ball);
-    mainScene.addChildEntity(leftPaddle);
-    mainScene.addChildEntity(rightPaddle);
-
-
-    // Update the ball position
-    ball.state.speed = new MomentumEngine.Classes.Vector2D(0.1, 0.05); // Current ball speed
-
-    ball.update = function (delta) {
-
-        this.pos.add(this.state.speed.clone().multiply(delta));
-
-        if ((this.left + baseSize > width && this.state.speed.x > 0) || (this.left < 0 && this.state.speed.x < 0)) {
-            this.state.speed.x = -this.state.speed.x;
-        }
-
-        if ((this.top + baseSize > height && this.state.speed.y > 0) || (this.top < 0 && this.state.speed.y < 0)) {
-            this.state.speed.y = -this.state.speed.y;
-        }
-
-    };
-
-
-    // Update the left paddle according to keyboard input
-    leftPaddle.update = function (delta) {
-
-        if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_Q) || pong.inputs.keyboard.isPressed(KeyConsts.UP)) {
-            leftPaddle.top -= (0.5 * delta);
-        }
-
-        if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_A) || pong.inputs.keyboard.isPressed(KeyConsts.DOWN)) {
-            leftPaddle.top += (0.5 * delta);
-        }
-
-        if (leftPaddle.top > height - (baseSize * 8)) {
-            leftPaddle.top = height - (baseSize * 8);
-        }
-
-        if (leftPaddle.top < baseSize) {
-            leftPaddle.top = baseSize;
-        }
-
-        if (leftPaddle.isCollidingWith(ball) && ball.state.speed.x < 0) {
-            ball.state.speed.x = -ball.state.speed.x;
-        }
-
-    };
-
-
-    // Update the right paddle according to keyboard input
-    rightPaddle.update = function (delta) {
-
-        if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_O)) {
-            rightPaddle.top -= (0.5 * delta);
-        }
-
-        if (pong.inputs.keyboard.isPressed(KeyConsts.CHAR_L)) {
-            rightPaddle.top += (0.5 * delta);
-        }
-
-        if (rightPaddle.top > height - (baseSize * 8)) {
-            rightPaddle.top = height - (baseSize * 8);
-        }
-
-        if (rightPaddle.top < baseSize) {
-            rightPaddle.top = baseSize;
-        }
-
-        if (rightPaddle.isCollidingWith(ball) && ball.state.speed.x > 0) {
-            ball.state.speed.x = -ball.state.speed.x;
-        }
-
-    };
-
+    pong.addBall(ball);
+    pong.addPaddle(leftPaddle);
+    pong.addPaddle(rightPaddle);
 
     pong.start();
 

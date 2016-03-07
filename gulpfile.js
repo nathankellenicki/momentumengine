@@ -102,10 +102,8 @@ var build = function (options, callback) {
 
 examples.forEach((example) => {
 
-
     let entry = {};
     entry[example] = path.join(__dirname, "examples", example, `${example}.js`);
-
 
     gulp.task(`${example}-example`, (callback) => {
 
@@ -116,7 +114,6 @@ examples.forEach((example) => {
             minify: minify
         }, callback);
     });
-
 
 });
 
