@@ -74,9 +74,9 @@ class Paddle extends MomentumEngine.Classes.Rect {
 
     update (delta) {
 
-        if (this._game.inputs.keyboard.isPressed(this.keyUp)) {
+        if (this.keyUp(this, delta)) {
             this.top -= (0.5 * delta);
-        } else if (this._game.inputs.keyboard.isPressed(this.keyDown)) {
+        } else if (this.keyDown(this, delta)) {
             this.top += (0.5 * delta);
         }
 
@@ -129,7 +129,8 @@ class Pong extends MomentumEngine.Classes.Game {
             fixRatio: true,
             desiredFps: 60,
             inputs: {
-                keyboard: true
+                keyboard: true,
+                gamepad: true
             }
         });
 
@@ -170,6 +171,117 @@ class Pong extends MomentumEngine.Classes.Game {
 }
 
 
+var leftPaddleUpCondition = function (paddle, delta) {
+
+    let gamepadInput = paddle._game.inputs.gamepad;
+
+    let gamepadConnected = (gamepadInput.numGamepads >= 1),
+        axisMoved = false;
+
+    if (gamepadConnected) {
+
+        let upDownAxes = gamepadInput.getGamepadById(0).getAxis(1);
+
+        if (upDownAxes < -0.1) {
+            this.top += (0.5 * delta) * upDownAxes;
+            axisMoved = true;
+        }
+
+    }
+
+    if (!axisMoved) {
+        if (paddle._game.inputs.keyboard.isPressed(KeyConsts.CHAR_Q)) {
+        }
+
+    }
+
+};
+
+
+var leftPaddleDownCondition = function (paddle, delta) {
+
+    let gamepadInput = paddle._game.inputs.gamepad;
+
+    let gamepadConnected = (gamepadInput.numGamepads >= 1),
+        axisMoved = false;
+
+    if (gamepadConnected) {
+
+        let upDownAxes = gamepadInput.getGamepadById(0).getAxis(1);
+
+        if (upDownAxes > 0.1) {
+            this.top += (0.5 * delta) * upDownAxes;
+            axisMoved = true;
+        }
+
+    }
+
+    if (!axisMoved) {
+        if (paddle._game.inputs.keyboard.isPressed(KeyConsts.CHAR_A)) {
+        }
+
+    }
+
+};
+
+
+var rightPaddleUpCondition = function (paddle, delta) {
+
+    let gamepadInput = paddle._game.inputs.gamepad;
+
+    let gamepadConnected = (gamepadInput.numGamepads >= 1),
+        axisMoved = false;
+
+    if (gamepadConnected) {
+
+        let upDownAxes = gamepadInput.getGamepadById(0).getAxis(4);
+
+        if (upDownAxes < -0.1) {
+            this.top += (0.5 * delta) * upDownAxes;
+            axisMoved = true;
+        }
+
+    }
+
+    if (!axisMoved) {
+        if (paddle._game.inputs.keyboard.isPressed(KeyConsts.CHAR_O)) {
+        }
+
+    }
+
+};
+
+
+var rightPaddleDownCondition = function (paddle, delta) {
+
+    let gamepadInput = paddle._game.inputs.gamepad;
+
+    let gamepadConnected = (gamepadInput.numGamepads >= 1),
+        axisMoved = false;
+
+    if (gamepadConnected) {
+
+        let upDownAxes = gamepadInput.getGamepadById(0).getAxis(4);
+
+        if (upDownAxes > 0.1) {
+            this.top += (0.5 * delta) * upDownAxes;
+            axisMoved = true;
+        }
+
+    }
+
+    if (!axisMoved) {
+        if (paddle._game.inputs.keyboard.isPressed(KeyConsts.CHAR_L)) {
+        }
+
+    }
+
+};
+
+
+
+
+
 window.onload = function () {
 
     var pong = new Pong(document.getElementById("canvas"), width, height);
@@ -177,13 +289,13 @@ window.onload = function () {
     var ball = new Ball((width / 2) - (baseSize / 2), (height / 2) - (baseSize / 2));
 
     var leftPaddle = new Paddle(baseSize, {
-        up: KeyConsts.CHAR_Q,
-        down: KeyConsts.CHAR_A
+        up: leftPaddleUpCondition,
+        down: leftPaddleDownCondition
     });
 
     var rightPaddle = new Paddle(width - (baseSize * 2), {
-        up: KeyConsts.CHAR_O,
-        down: KeyConsts.CHAR_L
+        up: rightPaddleUpCondition,
+        down: rightPaddleDownCondition
     });
 
     var leftScoreboard = new Scoreboard(baseSize),

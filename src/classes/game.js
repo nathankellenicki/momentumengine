@@ -160,6 +160,7 @@ class Game extends Entity {
                 window.webkitRequestAnimationFrame ||
                 window.mozRequestAnimationFrame ||
                 function (callback) {
+                    console.log("THIS");
                     window.setTimeout(callback, 1000 / self.desiredFps);
                 });
 

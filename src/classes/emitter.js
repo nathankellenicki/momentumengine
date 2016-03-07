@@ -57,7 +57,7 @@ class Emitter extends Entity {
 
         if (this.emitting) {
 
-            let currentTime = +(new Date());
+            let currentTime = Date.now();
 
             if (!this._wasEmitting) {
                 this._wasEmitting = true;

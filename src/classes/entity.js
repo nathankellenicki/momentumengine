@@ -207,7 +207,7 @@ class Entity {
     _updateEntity (delta) {
 
         if (this.timeToLive) {
-            if (+(new Date()) - this._creationTime > this.timeToLive) {
+            if (Date.now() - this._creationTime > this.timeToLive) {
                 this._parent.detachChildEntity(this);
             }
         }
@@ -216,7 +216,9 @@ class Entity {
         if (this.velocity && (this.velocity.x !== 0 || this.velocity.y !== 0)) {
 
             this.velocity.add(this._calculateFields(delta));
-            this.pos.add(this.velocity.clone().multiply(delta));
+            //this.pos.add(this.velocity.clone().multiply(delta));
+            this.pos.x += (this.velocity.x * delta);
+            this.pos.y += (this.velocity.y * delta);
 
         }
 
