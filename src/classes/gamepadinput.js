@@ -48,19 +48,49 @@ class GamepadInput {
         self._gamepadState = {};
         self.gamepadIds = [];
 
-        window.addEventListener("gamepadconnected", (event) => {
-            self._gamepadState[event.gamepad.index] = new Gamepad(event.gamepad);
-            self.gamepadIds.push(event.gamepad.index);
-            console.log("Connected");
-            console.log(event.gamepad);
-            console.log(event.gamepad.buttons[0]);
-        });
+        if (!('ongamepadconnected' in window)) {
 
-        window.addEventListener("gamepaddisconnected", (event) => {
-            delete self._gamepadState[event.gamepad.index];
-            self.gamepadIds.splice(self.gamepadIds.indexOf(event.gamepad.index));
-            console.log("Disconnected");
-        });
+            let pollGamepads = function () {
+
+                let gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+
+                for (var i = 0; i < gamepads.length; i++) {
+
+                    let gamepad = gamepads[i];
+
+                    if (gamepad) {
+
+                        if (self.gamepadIds.indexOf(gamepad.index) < 0) {
+                            self._gamepadState[gamepad.index] = new Gamepad(gamepad);
+                            self.gamepadIds.push(gamepad.index);
+
+                            console.log(`Gamepad ${gamepad.index} connected`);
+
+                        }
+
+                    }
+
+                }
+
+            };
+
+            let interval = setInterval(pollGamepads, 5);
+
+        } else {
+
+            window.addEventListener("gamepadconnected", (event) => {
+                self._gamepadState[event.gamepad.index] = new Gamepad(event.gamepad);
+                self.gamepadIds.push(event.gamepad.index);
+                console.log(`Gamepad ${event.gamepad.index} connected`);
+            });
+
+            window.addEventListener("gamepaddisconnected", (event) => {
+                delete self._gamepadState[event.gamepad.index];
+                self.gamepadIds.splice(self.gamepadIds.indexOf(event.gamepad.index));
+                console.log(`Gamepad ${event.gamepad.index} connected`);
+            });
+
+        }
 
     }
 

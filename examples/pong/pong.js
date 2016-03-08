@@ -191,6 +191,7 @@ var leftPaddleUpCondition = function (paddle, delta) {
 
     if (!axisMoved) {
         if (paddle._game.inputs.keyboard.isPressed(KeyConsts.CHAR_Q)) {
+            this.top -= 0.5 * delta;
         }
 
     }
@@ -218,6 +219,7 @@ var leftPaddleDownCondition = function (paddle, delta) {
 
     if (!axisMoved) {
         if (paddle._game.inputs.keyboard.isPressed(KeyConsts.CHAR_A)) {
+            this.top += 0.5 * delta;
         }
 
     }
@@ -229,7 +231,7 @@ var rightPaddleUpCondition = function (paddle, delta) {
 
     let gamepadInput = paddle._game.inputs.gamepad;
 
-    let gamepadConnected = (gamepadInput.numGamepads >= 1),
+    let gamepadConnected = (gamepadInput.numGamepads >= 1 && gamepadInput.getGamepadById(0).numAxis >= 6),
         axisMoved = false;
 
     if (gamepadConnected) {
@@ -245,6 +247,7 @@ var rightPaddleUpCondition = function (paddle, delta) {
 
     if (!axisMoved) {
         if (paddle._game.inputs.keyboard.isPressed(KeyConsts.CHAR_O)) {
+            this.top -= 0.5 * delta;
         }
 
     }
@@ -272,6 +275,7 @@ var rightPaddleDownCondition = function (paddle, delta) {
 
     if (!axisMoved) {
         if (paddle._game.inputs.keyboard.isPressed(KeyConsts.CHAR_L)) {
+            this.top += 0.5 * delta;
         }
 
     }
