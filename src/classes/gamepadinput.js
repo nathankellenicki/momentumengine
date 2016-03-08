@@ -48,7 +48,7 @@ class GamepadInput {
         self._gamepadState = {};
         self.gamepadIds = [];
 
-        if (!('ongamepadconnected' in window)) {
+        if (!("ongamepadconnected" in window)) {
 
             let pollGamepads = function () {
 
