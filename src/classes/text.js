@@ -17,6 +17,7 @@ class Text extends Entity {
         this.textAlign = "start";
         this.textBaseline = "alphabetic";
         this.direction = "inherit";
+        this.letterSpacing = 0;
 
     }
 
@@ -25,6 +26,46 @@ class Text extends Entity {
 
         if (entity instanceof Rect) {
             return CollisionMethods.AABB(this, entity);
+        }
+
+    }
+
+
+    _renderText (text, x, y, letterSpacing, renderFunc) {
+
+        // Code modified from original by David Hong (sozonov): https://jsfiddle.net/sozonov/mg1jkz3q/
+
+        if (!text || typeof text !== "string" || text.length === 0) {
+            return false;
+        }
+
+        let characters = text.split(""),
+            index = 0,
+            current,
+            currentPosition = x,
+            align = 1;
+
+        if (this.textAlign === "right") {
+            characters = characters.reverse();
+            align = -1;
+        } else if (this.textAlign === "center") {
+
+            let totalWidth = 0;
+
+            for (let i = 0; i < characters.length; i++) {
+                totalWidth += (this._game.context.measureText(characters[i]).width + letterSpacing);
+            }
+
+            currentPosition = x - (totalWidth / 2);
+
+        }
+
+        while (index < text.length) {
+
+            current = characters[index++];
+            renderFunc(current, currentPosition, y);
+            currentPosition += (align * (this._game.context.measureText(current).width + letterSpacing));
+
         }
 
     }
@@ -42,12 +83,12 @@ class Text extends Entity {
 
             if (this.font.fill) {
                 this._game.context.fillStyle = this.font.fill;
-                this._game.context.fillText(this.text, this.relativeLeft, this.relativeTop);
+                this._renderText(this.text, this.relativeLeft, this.relativeTop, this.letterSpacing, this._game.context.fillText.bind(this._game.context));
             }
 
             if (this.font.stroke) {
                 this._game.context.strokeStyle = this.font.stroke;
-                this._game.context.strokeText(this.text, this.relativeLeft, this.relativeTop);
+                this._renderText(this.text, this.relativeLeft, this.relativeTop, this.letterSpacing, this._game.context.strokeText.bind(this._game.context));
             }
 
             return true;
