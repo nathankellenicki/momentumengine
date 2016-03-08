@@ -205,6 +205,34 @@ class Game extends Entity {
     }
 
 
+    toggleFullScreen () {
+
+        if (!document.mozFullScreen && !document.webkitFullScreen) {
+
+            if (this.canvas.mozRequestFullScreen) {
+                this.canvas.mozRequestFullScreen();
+            } else {
+                this.canvas.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+            }
+
+        } else {
+
+            if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else {
+                document.webkitCancelFullScreen();
+            }
+
+        }
+
+    }
+
+
+    get isFullScreen () {
+        return (!document.mozFullScreen && !document.webkitFullScreen);
+    }
+
+
 }
 
 

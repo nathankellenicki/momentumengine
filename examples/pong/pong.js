@@ -318,4 +318,11 @@ window.onload = function () {
     pong.start();
 
 
+    document.addEventListener("keydown", function(e) {
+        if (e.keyCode == 13) {
+            pong.toggleFullScreen();
+        }
+    }, false);
+
+
 };
