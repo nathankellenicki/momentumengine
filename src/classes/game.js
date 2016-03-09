@@ -39,6 +39,10 @@ class Game extends Entity {
         // Optional params
         this.desiredFps = config.desiredFps || 60;
 
+        this.rescaleOnFullScreen = !!config.rescaleOnFullScreen;
+
+        this.scale = 1;
+
         if (config.fixRatio) {
 
             let deviceRatio = window.devicePixelRatio,
@@ -107,6 +111,7 @@ class Game extends Entity {
         this._lastFrameTimestamp = 0;
         this._lastFrameTotalRenders = 0;
         this._wantPause = true;
+        this._fullScreenLastFrame = false;
 
     }
 
@@ -135,8 +140,60 @@ class Game extends Entity {
 
         this.frameCounter++;
 
+        this._frameMaintenance();
         this._updateEntity(delta);
         this._renderEntity();
+        this._updateInputs(); // NK: This happens at the end for reasons
+
+    }
+
+
+    _updateInputs () {
+
+        for (let input in this.inputs) {
+            if (this.inputs[input].update) {
+                this.inputs[input].update();
+            }
+        }
+
+    }
+
+
+    _frameMaintenance () {
+
+        if (this.isFullScreen) {
+
+            if (this._fullScreenLastFrame == false) {
+
+                this.canvas.style.width = `${screen.width}px`;
+                this.canvas.style.height = `${screen.height}px`;
+
+                if (this.rescaleOnFullScreen) {
+                    this.canvas.width = screen.width * this.scale;
+                    this.canvas.height = screen.height * this.scale;
+                }
+
+            }
+
+            this._fullScreenLastFrame = true;
+
+        } else {
+
+            if (this._fullScreenLastFrame == true) {
+
+                this.canvas.style.width = `${this.width}px`;
+                this.canvas.style.height = `${this.height}px`;
+
+                if (this.rescaleOnFullScreen) {
+                    this.canvas.width = this.width * this.scale;
+                    this.canvas.height = this.height * this.scale;
+                }
+
+            }
+
+            this._fullScreenLastFrame = false;
+
+        }
 
     }
 
@@ -229,7 +286,7 @@ class Game extends Entity {
 
 
     get isFullScreen () {
-        return (!document.mozFullScreen && !document.webkitFullScreen);
+        return document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
     }
 
 

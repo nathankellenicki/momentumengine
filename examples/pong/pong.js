@@ -167,7 +167,6 @@ class Pong extends MomentumEngine.Classes.Game {
         paddle.balls = this.balls;
     }
 
-
 }
 
 

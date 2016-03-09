@@ -27,7 +27,7 @@ class Gamepad {
 
     getAxis (axisId) {
 
-        if (this._gamepadObj.axes[axisId]) {
+        if (typeof this._gamepadObj.axes[axisId] !== "undefined") {
             return this._gamepadObj.axes[axisId];
         } else {
             throw new Error(`Axis ${axisId} not found on gamepad`);
@@ -48,35 +48,7 @@ class GamepadInput {
         self._gamepadState = {};
         self.gamepadIds = [];
 
-        if (!("ongamepadconnected" in window)) {
-
-            let pollGamepads = function () {
-
-                let gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-
-                for (var i = 0; i < gamepads.length; i++) {
-
-                    let gamepad = gamepads[i];
-
-                    if (gamepad) {
-
-                        if (self.gamepadIds.indexOf(gamepad.index) < 0) {
-                            self._gamepadState[gamepad.index] = new Gamepad(gamepad);
-                            self.gamepadIds.push(gamepad.index);
-
-                            console.log(`Gamepad ${gamepad.index} connected`);
-
-                        }
-
-                    }
-
-                }
-
-            };
-
-            let interval = setInterval(pollGamepads, 5);
-
-        } else {
+        if ('ongamepadconnected' in window) {
 
             window.addEventListener("gamepadconnected", (event) => {
                 self._gamepadState[event.gamepad.index] = new Gamepad(event.gamepad);
@@ -87,8 +59,74 @@ class GamepadInput {
             window.addEventListener("gamepaddisconnected", (event) => {
                 delete self._gamepadState[event.gamepad.index];
                 self.gamepadIds.splice(self.gamepadIds.indexOf(event.gamepad.index));
-                console.log(`Gamepad ${event.gamepad.index} connected`);
+                console.log(`Gamepad ${event.gamepad.index} disconnected`);
             });
+
+        }
+
+    }
+
+
+    update () {
+
+        if (!("ongamepadconnected" in window)) {
+
+            let gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+
+            // If there are more gamepads registered than we know about, make ourselves aware of the new ones
+            if (gamepads.length != this.gamepadIds.length) {
+
+                for (let i = 0; i < gamepads.length; i++) {
+
+                    let gamepad = gamepads[i];
+
+                    if (gamepad) {
+
+                        if (this.gamepadIds.indexOf(gamepad.index) < 0) {
+                            this._gamepadState[gamepad.index] = new Gamepad(gamepad);
+                            this.gamepadIds.push(gamepad.index);
+
+                            console.log(`Gamepad ${gamepad.index} connected`);
+
+                        }
+
+                    }
+
+                }
+
+                // If there is still a mismatch, then we assume some gamepads have been disconnected, so we need to remove them
+                if (gamepads.length != this.gamepadIds.length) {
+
+                    for (let i = 0; i < this.gamepadIds.length; i++) {
+
+                        let found = false;
+
+                        for (let j = 0; j < gamepads.length; j++) {
+
+                            let gamepad = gamepads[i];
+
+                            if (gamepad && gamepad.index == this.gamepadIds[i]) {
+                                found = true;
+                            }
+
+                        }
+
+                        if (!found) {
+
+                            console.log(`Gamepad ${this.gamepadIds[i]} disconnected`);
+
+                            delete this._gamepadState[this.gamepadIds[i]];
+                            this.gamepadIds.splice(this.gamepadIds.indexOf(this.gamepadIds[i]));
+
+                            i--;
+
+                        }
+
+                    }
+
+                }
+
+            }
 
         }
 
