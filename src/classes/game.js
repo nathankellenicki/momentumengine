@@ -13,6 +13,7 @@ class Game extends Entity {
 
         super(); // Call entity constructor
         config = config || {};
+        config.fullscreen = config.fullscreen || {};
         config.inputs = config.inputs || {};
 
 
@@ -35,13 +36,13 @@ class Game extends Entity {
             throw new Error("MomentumEngine.Classes.Game must be constructed with canvas height");
         }
 
+        this.scale = 1;
 
         // Optional params
         this.desiredFps = config.desiredFps || 60;
+        this.fixFrameRate = !!config.fixFrameRate;
 
-        this.rescaleOnFullScreen = !!config.rescaleOnFullScreen;
-
-        this.scale = 1;
+        this.fullScreenNativeResolution = !!config.fullscreen.nativeResolution;
 
         if (config.fixRatio) {
 
@@ -64,6 +65,7 @@ class Game extends Entity {
             }
 
             this.scale = deviceRatio / backingStoreRatio;
+            this._deviceRatio = deviceRatio;
 
             this.canvas.width = this.width * this.scale;
             this.canvas.height = this.height * this.scale;
@@ -71,12 +73,42 @@ class Game extends Entity {
             this.canvas.style.width = `${this.width}px`;
             this.canvas.style.height = `${this.height}px`;
 
+
+            // Calculate fullscreen settings
+
+            if (config.fullscreen.nativeResolution) {
+                this._fullScreenXScaling = screen.width / this.width;
+                this._fullScreenYScaling = screen.height / this.height;
+            } else {
+                this._fullScreenXScaling = 1;
+                this._fullScreenYScaling = 1;
+            }
+
+            this._fullScreenXPos = 0;
+            this._fullScreenYPos = 0;
+
+            if (config.fullscreen.maintainAspectRatio) {
+                if (this._fullScreenXScaling > this._fullScreenYScaling) {
+                    this._fullScreenXScaling = this._fullScreenYScaling;
+                    this._fullScreenXPos = (screen.width - (this.width * this._fullScreenXScaling)) / 2;
+                } else {
+                    this._fullScreenYScaling = this._fullScreenXScaling;
+                    this._fullScreenYPos = (screen.height - (this.height * this._fullScreenYScaling)) / 2;
+                }
+            }
+
+            console.log(this._fullScreenXScaling);
+            console.log(this._fullScreenYScaling);
+            console.log(this._fullScreenXPos);
+            console.log(this._fullScreenYPos);
+
+
             // Call getContext last for Ejecta only.
             if (typeof ejecta !== "undefined") {
                 this.context = this.canvas.getContext("2d");
             }
 
-            this.context.scale(deviceRatio, deviceRatio);
+            this.context.scale(this._deviceRatio, this._deviceRatio);
 
         } else {
 
@@ -140,7 +172,7 @@ class Game extends Entity {
 
         this.frameCounter++;
 
-        this._frameMaintenance();
+        this._preStep();
         this._updateEntity(delta);
         this._renderEntity();
         this._updateInputs(); // NK: This happens at the end for reasons
@@ -159,7 +191,7 @@ class Game extends Entity {
     }
 
 
-    _frameMaintenance () {
+    _preStep () {
 
         if (this.isFullScreen) {
 
@@ -168,9 +200,10 @@ class Game extends Entity {
                 this.canvas.style.width = `${screen.width}px`;
                 this.canvas.style.height = `${screen.height}px`;
 
-                if (this.rescaleOnFullScreen) {
+                if (this.fullScreenNativeResolution) {
                     this.canvas.width = screen.width * this.scale;
                     this.canvas.height = screen.height * this.scale;
+                    this.context.scale(this._deviceRatio, this._deviceRatio);
                 }
 
             }
@@ -184,10 +217,10 @@ class Game extends Entity {
                 this.canvas.style.width = `${this.width}px`;
                 this.canvas.style.height = `${this.height}px`;
 
-                if (this.rescaleOnFullScreen) {
-                    this.canvas.width = this.width * this.scale;
-                    this.canvas.height = this.height * this.scale;
-                }
+                this.canvas.width = this.width * this.scale;
+                this.canvas.height = this.height * this.scale;
+
+                this.context.scale(this._deviceRatio, this._deviceRatio);
 
             }
 
@@ -233,6 +266,10 @@ class Game extends Entity {
 
             let currentTimestamp = +(new Date()),
                 delta = currentTimestamp - self._lastFrameTimestamp;
+
+            if (self.fixFrameRate) {
+                delta = 1000 / self.desiredFps;
+            }
 
             //delta = Math.min(delta, 1000 / self.desiredFps);
             self._lastFrameTimestamp = currentTimestamp;

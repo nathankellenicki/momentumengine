@@ -128,6 +128,11 @@ class Pong extends MomentumEngine.Classes.Game {
             height: height,
             fixRatio: true,
             desiredFps: 60,
+            //fixFrameRate: true,
+            fullscreen: {
+                //nativeResolution: true,
+                //maintainAspectRatio: true
+            },
             inputs: {
                 keyboard: true,
                 gamepad: true

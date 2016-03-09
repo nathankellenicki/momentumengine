@@ -179,6 +179,60 @@ class Entity {
     }
 
 
+    _scaleForLeft (val) {
+
+        let game = this._game;
+
+        if (!game.isFullScreen) {
+            return val;
+        } else {
+            return (game._fullScreenXPos + (val * game._fullScreenXScaling));
+        }
+
+    }
+
+
+    _scaleForWidth (val) {
+
+        let game = this._game;
+
+        if (!game.isFullScreen) {
+            return val;
+        } else {
+            return (val * game._fullScreenXScaling);
+
+        }
+
+    }
+
+
+    _scaleForTop (val) {
+
+        let game = this._game;
+
+        if (!game.isFullScreen) {
+            return val;
+        } else {
+            return (game._fullScreenYPos + (val * game._fullScreenYScaling));
+        }
+
+    }
+
+
+    _scaleForHeight (val) {
+
+        let game = this._game;
+
+        if (!game.isFullScreen) {
+            return val;
+        } else {
+            return (val * game._fullScreenYScaling);
+
+        }
+
+    }
+
+
     _calculateFields (delta) {
 
         let acceleration = new Vector2D(0, 0);
@@ -216,7 +270,6 @@ class Entity {
         if (this.velocity && (this.velocity.x !== 0 || this.velocity.y !== 0)) {
 
             this.velocity.add(this._calculateFields(delta));
-            //this.pos.add(this.velocity.clone().multiply(delta));
             this.pos.x += (this.velocity.x * delta);
             this.pos.y += (this.velocity.y * delta);
 
