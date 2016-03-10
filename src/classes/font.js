@@ -9,7 +9,7 @@ class Font {
     constructor(family, size, fill = null, stroke = null) {
 
         this.family = family;
-        this.size = size;
+        this.size = `${size}px`;
         this.fill = fill;
         this.stroke = stroke;
 

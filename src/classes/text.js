@@ -39,6 +39,11 @@ class Text extends Entity {
             return false;
         }
 
+        if (letterSpacing == 0) {
+            renderFunc(text, x, y);
+            return;
+        }
+
         let characters = text.split(""),
             index = 0,
             current,
@@ -53,6 +58,7 @@ class Text extends Entity {
             let totalWidth = 0;
 
             for (let i = 0; i < characters.length; i++) {
+                // NK: We want to cache the results of measureText instead of recalculating every character every frame
                 totalWidth += (this._game.context.measureText(characters[i]).width + letterSpacing);
             }
 
@@ -64,6 +70,7 @@ class Text extends Entity {
 
             current = characters[index++];
             renderFunc(current, currentPosition, y);
+            // NK: We want to cache the results of measureText instead of recalculating every character every frame
             currentPosition += (align * (this._game.context.measureText(current).width + letterSpacing));
 
         }
