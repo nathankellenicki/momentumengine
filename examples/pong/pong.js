@@ -13,7 +13,7 @@ let white = new MomentumEngine.Classes.Color(255, 255, 255),
     black = new MomentumEngine.Classes.Color(0, 0, 0),
     red = new MomentumEngine.Classes.Color(255, 0, 0);
 
-let font = new MomentumEngine.Classes.Font("Arial", "32px", white, red);
+let font = new MomentumEngine.Classes.Font("Arial", 32, white, red);
 
 
 class Ball extends MomentumEngine.Classes.Rect {
@@ -130,8 +130,8 @@ class Pong extends MomentumEngine.Classes.Game {
             desiredFps: 60,
             //fixFrameRate: true,
             fullscreen: {
-                //nativeResolution: true,
-                //maintainAspectRatio: true
+                nativeResolution: true,
+                maintainAspectRatio: true
             },
             inputs: {
                 keyboard: true,
