@@ -90,12 +90,12 @@ class Text extends Entity {
 
             if (this.font.fill) {
                 this._game.context.fillStyle = this.font.fill;
-                this._renderText(this.text, this.relativeLeft, this.relativeTop, this.letterSpacing, this._game.context.fillText.bind(this._game.context));
+                this._renderText(this.text, this._scaleForLeft(this.relativeLeft), this._scaleForTop(this.relativeTop), this.letterSpacing, this._game.context.fillText.bind(this._game.context));
             }
 
             if (this.font.stroke) {
                 this._game.context.strokeStyle = this.font.stroke;
-                this._renderText(this.text, this.relativeLeft, this.relativeTop, this.letterSpacing, this._game.context.strokeText.bind(this._game.context));
+                this._renderText(this.text, this._scaleForLeft(this.relativeLeft), this._scaleForTop(this.relativeTop), this.letterSpacing, this._game.context.strokeText.bind(this._game.context));
             }
 
             return true;

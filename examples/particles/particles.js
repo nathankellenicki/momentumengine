@@ -8,7 +8,7 @@ let KeyConsts = MomentumEngine.Consts.Input.Keys;
 class BlueParticle extends MomentumEngine.Classes.Rect {
 
     constructor (x, y) {
-        super(x, y, 1, 1, new MomentumEngine.Classes.Color(255, 255, 255, 0));
+        super(x, y, 1, 1, new MomentumEngine.Classes.Color(0, 255, 0));
         this.timeToLive = 25500;
     }
 

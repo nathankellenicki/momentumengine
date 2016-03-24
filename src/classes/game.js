@@ -97,11 +97,6 @@ class Game extends Entity {
                 }
             }
 
-            console.log(this._fullScreenXScaling);
-            console.log(this._fullScreenYScaling);
-            console.log(this._fullScreenXPos);
-            console.log(this._fullScreenYPos);
-
 
             // Call getContext last for Ejecta only.
             if (typeof ejecta !== "undefined") {
