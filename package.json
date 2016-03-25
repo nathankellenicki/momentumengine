@@ -25,6 +25,7 @@
     "babel-preset-stage-0": "6.5.0",
     "babel-runtime": "6.6.1",
     "gulp": "3.9.1",
+    "gulp-jsdoc3": "0.2.1",
     "gulp-util": "3.0.7",
     "webpack": "1.12.14"
   }

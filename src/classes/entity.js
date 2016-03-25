@@ -2,9 +2,18 @@
 
 import Vector2D from "./vector2d.js";
 
+
+/**
+ * Class representing an entity in a scene
+ */
 class Entity {
 
 
+    /**
+     * Create an entity
+     * @param {number} x - x (Left) position of the entity
+     * @param {number} y - y (Top) position of the entity
+     */
     constructor (x = 0, y = 0) {
 
         this.pos = new Vector2D(x, y);
@@ -27,6 +36,9 @@ class Entity {
     }
 
 
+    /**
+     * x (Left) position of the entity
+     */
     get left () {
         return this.pos.x;
     }
@@ -36,6 +48,9 @@ class Entity {
     }
 
 
+    /**
+     * y (Top) position of the entity
+     */
     get top () {
         return this.pos.y;
     }
@@ -55,6 +70,9 @@ class Entity {
     }
 
 
+    /**
+     * Width of the entity
+     */
     get width () {
         return this.size.x;
     }
@@ -65,16 +83,24 @@ class Entity {
     }
 
 
+    /**
+     * Height of the entity
+     */
     get height () {
         return this.size.y;
     }
 
-
+    
     set height (height) {
         return this.size.y = height;
     }
 
 
+    /**
+     * Set the velocity of the entity
+     * @param {Number} x - x (Left) velocity
+     * @param {Number} y - y (Top) velocity
+     */
     setVelocity (x, y) {
 
         if (x instanceof Vector2D) {
@@ -87,6 +113,11 @@ class Entity {
     }
 
 
+    /**
+     * Set the acceleration of the entity
+     * @param x {Number} x - x (Left) acceleration
+     * @param y {Number} y - y (Top) acceleration
+     */
     setAcceleration (x, y) {
 
         if (x instanceof Vector2D) {
@@ -99,6 +130,11 @@ class Entity {
     }
 
 
+    /**
+     * Creates a new child entity.
+     * Note: This creates an instance of Entity, the base class. Under most circumstances you should use addChildEntity with an entity you have created.
+     * @returns {Entity}
+     */
     createChildEntity () {
 
         let child = new Entity();
@@ -112,6 +148,11 @@ class Entity {
     }
 
 
+    /**
+     * Add an entity as a child
+     * @param {Entity} child - The child entity
+     * @returns {Entity}
+     */
     addChildEntity (child) {
 
         child._updateGame(this._game);
@@ -123,6 +164,11 @@ class Entity {
     }
 
 
+    /**
+     * Removes entity from children
+     * @param {Entity} child - The child entity
+     * @returns {boolean} Indicates successful removal
+     */
     detachChildEntity (child) {
 
         for (let i = 0; i < this.children.length; i++) {

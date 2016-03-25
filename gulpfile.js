@@ -3,7 +3,8 @@
 var gulp = require("gulp"),
     path = require("path"),
     gutil = require("gulp-util"),
-    webpack = require("webpack");
+    webpack = require("webpack"),
+    jsdoc = require("gulp-jsdoc3");
 
 
 let minify = true,
@@ -133,5 +134,18 @@ gulp.task("engine", (callback) => {
 });
 
 
-gulp.task("build", ["engine", "examples"]);
+gulp.task("docs", (callback) => {
+    gulp.src([
+        "src/classes/*.js"
+    ], {
+        read: false
+    }).pipe(jsdoc({
+        opts: {
+            destination: "docs"
+        }
+    }, callback));
+})
+
+
+gulp.task("build", ["engine", "docs", "examples"]);
 gulp.task("default", ["build"]);

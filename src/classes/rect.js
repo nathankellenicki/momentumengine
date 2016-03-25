@@ -6,9 +6,21 @@ import Vector2D from "./vector2d.js";
 import CollisionMethods from "../libs/collisionmethods.js";
 
 
+/**
+ *  Class representing a rectangle in a scene
+ *  @extends Entity
+ */
 class Rect extends Entity {
 
 
+    /**
+     * Create a rectangle
+     * @param {number} x - x (Left) position of the rectangle
+     * @param {number} y - y (Top) position of the rectangle
+     * @param {number} width - Width of the rectangle
+     * @param {number} height - Height of the rectangle
+     * @param {Color} color - Color of the rectangle
+     */
     constructor (x, y, width, height, color) {
 
         super(x, y);
@@ -20,6 +32,11 @@ class Rect extends Entity {
     }
 
 
+    /**
+     * Detects if the rectangle is colliding with another entity
+     * @param {Entity} entity - Entity to check against
+     * @returns {boolean} Indicates whether the entities are colliding
+     */
     isCollidingWith (entity) {
 
         if (entity instanceof Rect) {
