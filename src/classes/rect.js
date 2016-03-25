@@ -1,7 +1,6 @@
 "use strict";
 
 import Entity from "./entity.js";
-import Vector2D from "./vector2d.js";
 
 import CollisionMethods from "../libs/collisionmethods.js";
 
