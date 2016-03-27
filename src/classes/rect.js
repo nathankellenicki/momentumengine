@@ -49,8 +49,31 @@ class Rect extends Entity {
 
         if (this._game) {
 
-            this._game.context.fillStyle = this.color.toString();
-            this._game.context.fillRect(this._scaleForLeft(this.relativeLeft), this._scaleForTop(this.relativeTop), this._scaleForWidth(this.width), this._scaleForHeight(this.height));
+            let left = this._scaleForLeft(this.relativeLeft),
+                top = this._scaleForTop(this.relativeTop),
+                width = this._scaleForWidth(this.width),
+                height = this._scaleForHeight(this.height),
+                ctx = this._game.context;
+
+            let xRot = left + (width / 2),
+                yRot = top + (height / 2);
+
+            if (this.rotation > 0) {
+                // Rotate the canvas based on the central point of this entity
+                ctx.translate(xRot, yRot);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.translate(-xRot, -yRot);
+            }
+
+            ctx.fillStyle = this.color.toString();
+            ctx.fillRect(left, top, width, height);
+
+            if (this.rotation > 0) {
+                // Rotate back after drawing
+                ctx.translate(xRot, yRot);
+                ctx.rotate(-(this.rotation * Math.PI / 180));
+                ctx.translate(-xRot, -yRot);
+            }
 
             return true;
 

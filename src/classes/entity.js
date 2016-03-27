@@ -20,6 +20,7 @@ class Entity {
         this.velocity = new Vector2D(0, 0);
         this.acceleration = new Vector2D(0, 0);
         this.size = new Vector2D(0, 0);
+        this.rotation = 0;
 
         this.fields = [];
 
@@ -27,7 +28,8 @@ class Entity {
         this.children = [];
 
         this._relativePos = this.pos.clone();
-        this._lastCalculated = 0;
+        this._lastRelativePosCalculated = 0;
+        this._lastRelativeSizeCalculated = 0;
         this._game = null;
         this._parent = null;
 
@@ -60,11 +62,19 @@ class Entity {
     }
 
 
+    /**
+     * Returns the absolute x (Left) position relative to the entities parent tree
+     * @returns {number} x - x (Left) position relative to the entities parent tree
+     */
     get relativeLeft () {
         return this._calculateRelativePos().x;
     }
 
 
+    /**
+     * Returns the absolute y (Top) position relative to the entities parent tree
+     * @returns {number} y - y (Top) position relative to the entities parent tree
+     */
     get relativeTop () {
         return this._calculateRelativePos().y;
     }
@@ -94,7 +104,7 @@ class Entity {
     set height (height) {
         return this.size.y = height;
     }
-
+    
 
     /**
      * Set the velocity of the entity
@@ -193,7 +203,7 @@ class Entity {
 
         // When rendering, the draw calls should use this._relativePos rather than this.pos in order for the position to be correct.
 
-        if (this._game && this._lastCalculated < this._game.frameCounter) {
+        if (this._game && this._lastRelativePosCalculated < this._game.frameCounter) {
 
             if (this._parent) {
 
@@ -205,7 +215,7 @@ class Entity {
                 this._relativePos.y = this.pos.y;
             }
 
-            this._lastCalculated = this._game.frameCounter;
+            this._lastRelativePosCalculated = this._game.frameCounter;
 
         }
 
