@@ -15,7 +15,7 @@ class ImageLoader {
             this._error = false;
         });
 
-        this._imageObj.addEventListener("_error", (err) => {
+        this._imageObj.addEventListener("error", (err) => {
             this._loaded = false;
             this._error = err;
         });
