@@ -150,7 +150,7 @@ class KeyboardInput {
 
 
     _keyUpHandler (event) {
-        wasReleased[event.keyCode = true];
+        wasReleased[event.keyCode] = true;
         this._keyState[event.keyCode] = false;
     }
 
