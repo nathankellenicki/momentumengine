@@ -99,7 +99,8 @@ const KeyConsts = {
 };
 
 
-let wasReleased = {};
+let wasReleased = {},
+    wasPressed = {};
 
 
 class KeyboardInput {
@@ -125,13 +126,28 @@ class KeyboardInput {
         console.log("[MomentumEngine] WARNING: MomentumEngine.Classes.KeyboardInput.isPressed is deprecated. Use isDown instead.")
         return !!this._keyState[keyCode];
     }
+    
 
     isDown (keyCode) {
 
         return !!this._keyState[keyCode];
     }
 
+
     wasPressed (keyCode) {
+
+        let pressed = !!wasPressed[keyCode];
+
+        if (pressed) {
+            wasPressed[keyCode] = false;
+        }
+
+        return pressed;
+
+    }
+
+
+    wasReleased (keyCode) {
 
         let pressed = !!wasReleased[keyCode];
 
@@ -145,12 +161,14 @@ class KeyboardInput {
 
     _keyDownHandler (event) {
         wasReleased[event.keyCode] = false;
+        wasPressed[event.keyCode] = true;
         this._keyState[event.keyCode] = true;
     }
 
 
     _keyUpHandler (event) {
         wasReleased[event.keyCode] = true;
+        wasPressed[event.keyCode] = false;
         this._keyState[event.keyCode] = false;
     }
 

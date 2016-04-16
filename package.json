@@ -1,6 +1,6 @@
 {
   "name": "momentumengine",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "An ES6 game and animation engine.",
   "main": "src/es6.js",
   "repository": {
