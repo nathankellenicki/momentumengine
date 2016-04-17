@@ -21,6 +21,7 @@ class Entity {
         this.acceleration = new Vector2D(0, 0);
         this.size = new Vector2D(0, 0);
         this.rotation = 0;
+        this.display = true;
 
         this.fields = [];
 
@@ -347,7 +348,7 @@ class Entity {
 
     _renderEntity () {
 
-        let rendered = this.render && this.render();
+        let rendered = this.display && this.render && this.render();
 
         if (rendered) {
             this._game._lastFrameTotalRenders++;
