@@ -47,7 +47,13 @@ class Entity {
     }
 
     set left (val) {
-        return this.pos.x = val;
+        let res = (this.pos.x = val);
+        if (this._parent) {
+            this._relativePos.x = this.pos.x + this._parent.relativeLeft;
+        } else {
+            this._relativePos.x = this.pos.x;
+        }
+        return res;
     }
 
 
@@ -59,7 +65,13 @@ class Entity {
     }
 
     set top (val) {
-        return this.pos.y = val;
+        let res = (this.pos.y = val);
+        if (this._parent) {
+            this._relativePos.y = this.pos.y + this._parent.relativeTop;
+        } else {
+            this._relativePos.y = this.pos.y;
+        }
+        return res;
     }
 
 

@@ -33,10 +33,10 @@ class Path extends Entity {
             ctx.strokeStyle = this.color.toString();
 
             ctx.beginPath();
-            ctx.moveTo(this.relativeLeft, this.relativeTop);
+            ctx.moveTo(this._scaleForLeft(this.relativeLeft), this._scaleForTop(this.relativeTop));
 
             for (let coord in this.coords) {
-                ctx.lineTo(this.relativeLeft + this.coords[coord].x, this.relativeTop + this.coords[coord].y);
+                ctx.lineTo(this._scaleForWidth(this.relativeLeft + this.coords[coord].x), this._scaleForHeight(this.relativeTop + this.coords[coord].y));
             }
 
             //ctx.closePath();
