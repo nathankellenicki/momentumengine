@@ -11,7 +11,7 @@ import Path from "./classes/path.js";
 import Color from "./classes/color.js";
 import Text from "./classes/text.js";
 import Font from "./classes/font.js";
-import Audio from "./classes/audio.js";
+import AudioTrack from "./classes/audio.js";
 import ImageLoader from "./classes/imageloader.js";
 
 import {KeyConsts} from "./classes/keyboardinput.js";
@@ -29,7 +29,7 @@ const Classes = {
     Color,
     Text,
     Font,
-    Audio,
+    AudioTrack,
     ImageLoader
 };
 

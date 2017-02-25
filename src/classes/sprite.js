@@ -58,10 +58,10 @@ class Sprite extends Entity {
                 this._imagePos.y,
                 this._imageSize.x || subWidth,
                 this._imageSize.y || subHeight,
-                this.relativeLeft,
-                this.relativeTop,
-                this.width || subWidth,
-                this.height || subHeight
+                this._scaleForLeft(this.relativeLeft),
+                this._scaleForTop(this.relativeTop),
+                this._scaleForWidth(this.width || subWidth),
+                this._scaleForHeight(this.height || subHeight)
             );
 
             return true;
